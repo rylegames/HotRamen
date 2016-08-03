@@ -75,14 +75,6 @@ Bot.on :message do |message|
   end
 end
 
-Bot.deliver(
-  recipient: {
-    id: '100000650169659'
-  },
-  message: {
-    text: 'Human?'
-  }
-)
 
 Bot.on :postback do |postback|
   case postback.payload

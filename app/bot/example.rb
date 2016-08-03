@@ -95,7 +95,7 @@ Bot.on :postback do |postback|
   Bot.deliver(
     recipient: postback.sender,
     message: {
-      text: text
+      text: "asdfasdfasdfasdfasdf"
     }
   )
 end

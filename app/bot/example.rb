@@ -1,5 +1,4 @@
 require 'facebook/messenger'
-require 'active_record'
 #require 'pg'
 
 #conn = PG::Connection.new(ENV['DATABASE_URL'])
@@ -24,7 +23,8 @@ Bot.on :message do |message|
     )
 
   when /new account/i
-    #User.new(facebook_id: message.sender.id).save
+    user = User.new(facebook_id: "asdfasdf")
+    user.save
 
     Bot.deliver(
       recipient: message.sender,
@@ -34,8 +34,7 @@ Bot.on :message do |message|
     )
 
   when /all acounts/i
-    #text = User.first.facebook_id
-    text = "ASDF"
+    text = User.first.facebook_id
 
     Bot.deliver(
       recipient: message.sender,

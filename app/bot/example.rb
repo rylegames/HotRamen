@@ -1,7 +1,4 @@
 require 'facebook/messenger'
-#require 'pg'
-
-#conn = PG::Connection.new(ENV['DATABASE_URL'])
 
 Facebook::Messenger.configure do |config|
   config.access_token = ENV['ACCESS_TOKEN']
@@ -23,7 +20,7 @@ Bot.on :message do |message|
     )
 
   when /new account/i
-    user = User.new(facebook_id: "asdfasdf")
+    user = User.new(facebook_id: message.sender["id"])
     user.save
 
     Bot.deliver(
@@ -33,64 +30,46 @@ Bot.on :message do |message|
       }
     )
 
-  when /all acounts/i
-    text = User.first.facebook_id
+  when /add/i
+    user = User.find_by(facebook_id: message.sender["id"]).
+    event_id = message.text.split(" ")[-1].to_i
+    attendance = user.attend!(event_id)
+    attendance.save
 
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: text
+        text: 'added!'
       }
     )
 
-  when /something humans like/i
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'I found something humans seem to like:'
-      }
-    )
-
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        attachment: {
-          type: 'image',
-          payload: {
-            url: 'https://i.imgur.com/iMKrDQc.gif'
-          }
+  when /all events/i
+    events = Event.all
+    events do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.id.to_
         }
-      }
-    )
+      )
+    end
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        attachment: {
-          type: 'template',
-          payload: {
-            template_type: 'button',
-            text: 'Did human like it?',
-            buttons: [
-              { type: 'postback', title: 'Yes', payload: 'HUMAN_LIKED' },
-              { type: 'postback', title: 'No', payload: 'HUMAN_DISLIKED' }
-            ]
-          }
+  when /my events/i
+    user = User.find_by(facebook_id: message.sender["id"]).
+    user.events do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.title
         }
-      }
-    )
+      )
+    end
+
   else
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: 'You are now marked for extermination.'
-      }
-    )
-
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'Have a nice day.'
+        text: "I couldn't catch that. Try texting 'help'"
       }
     )
   end
@@ -99,16 +78,16 @@ end
 
 Bot.on :postback do |postback|
   case postback.payload
-  when 'HUMAN_LIKED'
+  when 'ALL_EVENTS'
     text = 'That makes bot happy!'
-  when 'HUMAN_DISLIKED'
+  when 'YOUR_EVENTS'
     text = 'Oh.'
   end
 
   Bot.deliver(
     recipient: postback.sender,
     message: {
-      text: "asdfasdfasdfasdfasdf"
+      text: text
     }
   )
 end

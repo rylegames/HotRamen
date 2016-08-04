@@ -17,12 +17,16 @@ ActiveRecord::Schema.define(version: 20160804004605) do
     t.integer  "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_attendances_on_event_id"
+    t.index ["user_id", "event_id"], name: "index_attendances_on_user_id_and_event_id", unique: true
+    t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
-    t.datetime "datetime"
+    t.datetime "begin_date"
+    t.datetime "end_date"
     t.string   "location"
     t.float    "latitude"
     t.float    "longitude"
@@ -34,6 +38,7 @@ ActiveRecord::Schema.define(version: 20160804004605) do
     t.string   "facebook_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["facebook_id"], name: "index_users_on_facebook_id", unique: true
   end
 
 end

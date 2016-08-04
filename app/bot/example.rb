@@ -22,6 +22,27 @@ Bot.on :message do |message|
         text: 'Hello, human!'
       }
     )
+
+  when /new account/i
+    User.new(facebook_id: message.sender.id).save
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: 'created!'
+      }
+    )
+
+  when /all acounts/i
+    text = User.first.facebook_id
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: text
+      }
+    )
+
   when /something humans like/i
     Bot.deliver(
       recipient: message.sender,

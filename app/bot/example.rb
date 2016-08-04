@@ -30,18 +30,18 @@ Bot.on :message do |message|
       }
     )
 
-  when /add/i
-    user = User.find_by(facebook_id: message.sender["id"])
-    event_id = message.text.split(" ")[-1].to_i
-    attendance = user.attend!(event_id)
-    attendance.save
+  # when /add/i
+  #   user = User.find_by(facebook_id: message.sender["id"])
+  #   event_id = message.text.split(" ")[-1].to_i
+  #   attendance = user.attend!(event_id)
+  #   attendance.save
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'added!'
-      }
-    )
+  #   Bot.deliver(
+  #     recipient: message.sender,
+  #     message: {
+  #       text: 'added!'
+  #     }
+  #   )
 
   when /all events/i
     events = Event.all

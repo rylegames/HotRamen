@@ -55,7 +55,7 @@ Bot.on :message do |message|
     end
 
   when /my events/i
-    user = User.find_by(facebook_id: message.sender["id"]).
+    user = User.find_by(facebook_id: message.sender["id"])
     user.events.each do |event|
       Bot.deliver(
         recipient: message.sender,

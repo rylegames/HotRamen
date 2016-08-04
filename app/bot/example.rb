@@ -24,7 +24,7 @@ Bot.on :message do |message|
     )
 
   when /new account/i
-    User.new(facebook_id: message.sender.id).save
+    #User.new(facebook_id: message.sender.id).save
 
     Bot.deliver(
       recipient: message.sender,
@@ -34,7 +34,8 @@ Bot.on :message do |message|
     )
 
   when /all acounts/i
-    text = User.first.facebook_id
+    #text = User.first.facebook_id
+    text = "ASDF"
 
     Bot.deliver(
       recipient: message.sender,

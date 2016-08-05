@@ -36,14 +36,16 @@ Bot.on :message do |message|
       "'show 1' -> show info of event with id, in this case 1",
       "'add 1' -> add event to your schedule, in this case 1",
       "'delete 1' -> delete event in your schedule, in this case 1",
-      "'help' -> Here's the list of commands ..."].join("\n")
+      "'help' -> Here's the list of commands ..."]
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: text
-      }
-    )
+    text.each do |piece|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: text
+        }
+      )
+    end
 
   when /new account/i
     begin

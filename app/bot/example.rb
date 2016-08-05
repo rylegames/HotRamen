@@ -51,9 +51,10 @@ Bot.on :message do |message|
 
   when /add/i
     user = User.find_by(facebook_id: message.sender["id"])
+    event_id = message.text.split(" ")[-1].to_i
+    event = Event.find_by(id: event_id)
     
-    if user
-      event_id = message.text.split(" ")[-1].to_i
+    if event
       attendance = user.attend!(event_id)
       attendance.save
 

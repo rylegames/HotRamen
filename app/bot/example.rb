@@ -61,36 +61,36 @@ Bot.on :message do |message|
   #     }
   #   )
 
-  when /more/i
-    begin
-      event_id = message.text.split(" ")[-1].to_i
-      event = Event.find_by(id: event_id)
+  # when /more/i
+  #   begin
+  #     event_id = message.text.split(" ")[-1].to_i
+  #     event = Event.find_by(id: event_id)
 
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.full_display
-        }
-      )
-      event = ""
-    catch
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'failed!'
-        }
-      )
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: event.full_display
+  #       }
+  #     )
+  #     event = ""
+  #   catch
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: 'failed!'
+  #       }
+  #     )
 
-  when /all events/i
-    events = Event.all
-    events.each do |event|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
+  # when /all events/i
+  #   events = Event.all
+  #   events.each do |event|
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: event.mini_display
+  #       }
+  #     )
+  #   end
 
   # when /my events/i
   #   user = User.find_by(facebook_id: message.sender["id"])

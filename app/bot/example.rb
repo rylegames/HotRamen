@@ -1,5 +1,15 @@
 require 'facebook/messenger'
 
+# curl -X POST -H "Content-Type: application/json" -d '{
+#   "setting_type":"call_to_actions",
+#   "thread_state":"new_thread",
+#   "call_to_actions":[
+#     {
+#       "payload":"WELCOME_NEW_USER"
+#     }
+#   ]
+# }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAASmNgjGL9sBAEjNsWIuB1SDX1VjExN9NgBWGNP4kl0ZC3wk3XdOuhQ4Ee2JH0KlzG2QKMrer7MbwEZCpryAUnWjzXTsFs4ZB8KG9NZA9EX772lIXUuHYEHHHN9l5PQ7awdqUttfkXMzJBzks8v17h1ZC5ZCmqyf7tco4RHODtzQZDZD"      
+
 Facebook::Messenger.configure do |config|
   config.access_token = ENV['ACCESS_TOKEN']
   config.verify_token = ENV['VERIFY_TOKEN']
@@ -49,7 +59,7 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: event.id.to_s
+          text: event.mini_display
         }
       )
     end
@@ -60,7 +70,7 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: event.title
+          text: event.mini_display
         }
       )
     end
@@ -75,13 +85,14 @@ Bot.on :message do |message|
   end
 end
 
-
 Bot.on :postback do |postback|
   case postback.payload
   when 'ALL_EVENTS'
     text = 'That makes bot happy!'
   when 'YOUR_EVENTS'
     text = 'Oh.'
+  when 'WELCOME_NEW_USER'
+    text = "Welcome to upData, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
   end
 
   Bot.deliver(
@@ -95,3 +106,9 @@ end
 Bot.on :delivery do |delivery|
   puts "Delivered message(s) #{delivery.ids}"
 end
+
+
+
+
+
+

@@ -29,6 +29,23 @@ Bot.on :message do |message|
       }
     )
 
+  when /help/i
+    text = """
+      Here's the list of commands \n 
+      'all events' -> display all upcoming events \n
+      'my events' -> display my events in schedule \n
+      'show 1' -> show info of event with id, in this case 1 \n
+      'add 1' -> add event to your schedule, in this case 1 \n
+      'delete 1' -> delete event in your schedule, in this case 1 \n
+      'help' -> Here's the list of commands ...
+    """
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: text
+      }
+    )
+
   when /new account/i
     begin
       user = User.new(facebook_id: message.sender["id"])
@@ -72,6 +89,17 @@ Bot.on :message do |message|
         }
       )
     end
+
+  when /delete/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    event_id = message.text.split(" ")[-1].to_i
+    user.unattend(event_id)
+    Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'Event has been deleted!'
+        }
+      )
 
   when /more/i
     event_id = message.text.split(" ")[-1].to_i

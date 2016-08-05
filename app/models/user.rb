@@ -11,7 +11,10 @@ class User < ApplicationRecord
 	end
 
 	def unattend(new_event_id)
-		attendances.find_by(event_id: new_event_id).destroy
+		attendance = attendances.find_by(event_id: new_event_id)
+		if attendance
+			attendance.destroy
+		end
 	end
 
 end

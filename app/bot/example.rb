@@ -29,16 +29,24 @@ Bot.on :message do |message|
       }
     )
 
-  # when /new account/i
-  #   user = User.new(facebook_id: message.sender["id"])
-  #   user.save
+  when /new account/i
+    begin
+      user = User.new(facebook_id: message.sender["id"])
+      user.save
 
-  #   Bot.deliver(
-  #     recipient: message.sender,
-  #     message: {
-  #       text: 'created!'
-  #     }
-  #   )
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'created!'
+        }
+      )
+    catch
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'failed!'
+        }
+      )
 
   when /add/i
     user = User.find_by(facebook_id: message.sender["id"])

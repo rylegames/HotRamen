@@ -84,6 +84,7 @@ Bot.on :message do |message|
             text: text
           }
         )
+      end
     else
       Bot.deliver(
           recipient: message.sender,

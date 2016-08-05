@@ -29,50 +29,17 @@ Bot.on :message do |message|
       }
     )
 
-  # when /new account/i
-  #   begin
-  #     user = User.new(facebook_id: message.sender["id"])
-  #     user.save
-
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'created!'
-  #       }
-  #     )
-  #   catch
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'failed!'
-  #       }
-  #     )
-
-  # when /add/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   event_id = message.text.split(" ")[-1].to_i
-  #   attendance = user.attend!(event_id)
-  #   attendance.save
-
-  #   Bot.deliver(
-  #     recipient: message.sender,
-  #     message: {
-  #       text: 'Event has been added!'
-  #     }
-  #   )
-
-  when /more/i
+  when /new account/i
     begin
-      event_id = message.text.split(" ")[-1].to_i
-      event = Event.find_by(id: event_id)
+      user = User.new(facebook_id: message.sender["id"])
+      user.save
 
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: event.full_display
+          text: 'created!'
         }
       )
-      event = ""
     catch
       Bot.deliver(
         recipient: message.sender,
@@ -80,6 +47,31 @@ Bot.on :message do |message|
           text: 'failed!'
         }
       )
+    end
+
+  when /add/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    event_id = message.text.split(" ")[-1].to_i
+    attendance = user.attend!(event_id)
+    attendance.save
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: 'Event has been added!'
+      }
+    )
+
+  when /more/i
+    event_id = message.text.split(" ")[-1].to_i
+    event = Event.find_by(id: event_id)
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: event.full_display
+      }
+    )
 
   when /all events/i
     events = Event.all
@@ -92,16 +84,16 @@ Bot.on :message do |message|
       )
     end
 
-  # when /my events/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   user.events.each do |event|
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: event.mini_display
-  #       }
-  #     )
-  #   end
+  when /my events/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    user.events.each do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
 
   else
     Bot.deliver(

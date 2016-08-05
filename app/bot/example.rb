@@ -61,16 +61,18 @@ Bot.on :message do |message|
   #     }
   #   )
 
-  when /more/i
-    event_id = message.text.split(" ")[-1].to_i
-    event = Event.find_by(id: event_id)
+  # when /more/i
+  #   event_id = message.text.split(" ")[-1].to_i
+  #   event = Event.find_by(id: event_id)
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: event.full_display
-      }
-    )
+  #   Bot.deliver(
+  #     recipient: message.sender,
+  #     message: {
+  #       text: event.full_display
+  #     }
+  #   )
+
+  #   event = ""
 
   when /all events/i
     events = Event.all

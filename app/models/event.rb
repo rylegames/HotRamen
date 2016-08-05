@@ -37,8 +37,20 @@ class Event < ApplicationRecord
 			text = text + "ID: " + self.id.to_s + (" " * (30 - self.id.to_s.length - range.to_s.length)) + range.to_s+ "\n"
 		end
 
-
 		text = text + self.description + "\n" + self.location
+
+		if text.length > 320
+			new_text = Array.new
+			(1..text.length/320).each do |i|
+				new_text.push(text[320*(i-1)..320*(i)])
+				text = text[320..-1]
+			end
+			new_text.push(text)
+
+			return new_text
+		else
+			return [text]
+		end
 
 	end
 

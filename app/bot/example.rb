@@ -69,7 +69,7 @@ Bot.on :message do |message|
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: event.mini_display
+        text: event.full_display
       }
     )
 

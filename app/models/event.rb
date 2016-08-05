@@ -11,8 +11,9 @@ class Event < ApplicationRecord
 			text = self.title.downcase + " " * (30 - self.title.length) + "\n"
 		end
 
-		if self.id.to_s.length < (30 - self.begin_date.to_s.length + 8)
-			text = text + self.id.to_s + (" " * (30 - self.id.to_s.length - self.begin_date.to_s.length + 8)) + self.begin_date.to_s[0..-8] + "\n"
+		begin_date = self.begin_date.strftime("%a, %b %-d%l:%M%P")
+		if self.id.to_s.length < (30 - begin_date.to_s.length)
+			text = text + self.id.to_s + (" " * (30 - self.id.to_s.length - begin_date.to_s.length)) + begin_date.to_s+ "\n"
 		end
 
 		if self.description.length > 30

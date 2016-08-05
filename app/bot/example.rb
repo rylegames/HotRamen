@@ -66,12 +66,14 @@ Bot.on :message do |message|
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find_by(id: event_id)
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: event.full_display
-      }
-    )
+    event.full_display.each do |text|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: text
+        }
+      )
+    end
 
   when /all events/i
     events = Event.all

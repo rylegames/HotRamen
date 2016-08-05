@@ -49,13 +49,13 @@ Bot.on :message do |message|
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: 'added!'
+        text: 'Event has been added!'
       }
     )
 
   when /more/i
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find_by(event_id: event_id)
+    event = Event.find_by(id: event_id)
 
     Bot.deliver(
       recipient: message.sender,

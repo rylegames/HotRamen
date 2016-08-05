@@ -43,7 +43,7 @@ class Event < ApplicationRecord
 			new_text = Array.new
 			(1..text.length/315).each do |i|
 				new_text.push(text[315*(i-1)..315*(i)])
-				text = text[315..-1]
+				text = text[316..-1]
 			end
 			new_text.push(text)
 

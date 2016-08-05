@@ -51,16 +51,26 @@ Bot.on :message do |message|
 
   when /add/i
     user = User.find_by(facebook_id: message.sender["id"])
-    event_id = message.text.split(" ")[-1].to_i
-    attendance = user.attend!(event_id)
-    attendance.save
+    
+    if user
+      event_id = message.text.split(" ")[-1].to_i
+      attendance = user.attend!(event_id)
+      attendance.save
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'Event has been added!'
-      }
-    )
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'Event has been added!'
+        }
+      )
+    else
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "Couldn't find that event :( "
+        }
+      )
+    end
 
   when /more/i
     event_id = message.text.split(" ")[-1].to_i

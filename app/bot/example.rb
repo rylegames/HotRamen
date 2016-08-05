@@ -67,7 +67,7 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: "Couldn't find that event :( "
+          text: "Couldn't find that event. Double check the event number"
         }
       )
     end
@@ -76,13 +76,21 @@ Bot.on :message do |message|
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find_by(id: event_id)
 
-    event.full_display.each do |text|
+    if event
+      event.full_display.each do |text|
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: text
+          }
+        )
+    else
       Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: text
-        }
-      )
+          recipient: message.sender,
+          message: {
+            text: "Couldn't find that event. Double check the event number"
+          }
+        )
     end
 
   when /all events/i

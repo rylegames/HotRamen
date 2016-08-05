@@ -5,20 +5,20 @@ class Event < ApplicationRecord
 
 	def mini_display
 		#event = Event.find_by(event_id: event_id)
-		if self.title.length > 26
-			text = self.title[0..26] + "\n"
+		if self.title.length > 30
+			text = self.title[0..30] + "\n"
 		else
-			text = self.title + " " * (26 - self.title.length) + "\n"
+			text = self.title.downcase + " " * (30 - self.title.length) + "\n"
 		end
 
-		if self.id.to_s.length < (26 - self.begin_date.to_s.length + 8)
-			text = text + self.id.to_s + (" " * (26 - self.id.to_s.length - self.begin_date.to_s.length + 8)) + self.begin_date.to_s[0..-8] + "\n"
+		if self.id.to_s.length < (30 - self.begin_date.to_s.length + 8)
+			text = text + self.id.to_s + (" " * (30 - self.id.to_s.length - self.begin_date.to_s.length + 8)) + self.begin_date.to_s[0..-8] + "\n"
 		end
 
-		if self.description.length > 26
-			text = text + self.description[0..26] + "\n"
+		if self.description.length > 30
+			text = text + self.description[0..30] + "\n"
 		else
-			text = text + self.description + " " * (26 - self.description.length) + "\n"
+			text = text + self.description + " " * (30 - self.description.length) + "\n"
 		end
 
 		text = text + self.location

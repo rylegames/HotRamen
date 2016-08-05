@@ -29,29 +29,29 @@ Bot.on :message do |message|
       }
     )
 
-  when /new account/i
-    user = User.new(facebook_id: message.sender["id"])
-    user.save
+  # when /new account/i
+  #   user = User.new(facebook_id: message.sender["id"])
+  #   user.save
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'created!'
-      }
-    )
+  #   Bot.deliver(
+  #     recipient: message.sender,
+  #     message: {
+  #       text: 'created!'
+  #     }
+  #   )
 
-  when /add/i
-    user = User.find_by(facebook_id: message.sender["id"])
-    event_id = message.text.split(" ")[-1].to_i
-    attendance = user.attend!(event_id)
-    attendance.save
+  # when /add/i
+  #   user = User.find_by(facebook_id: message.sender["id"])
+  #   event_id = message.text.split(" ")[-1].to_i
+  #   attendance = user.attend!(event_id)
+  #   attendance.save
 
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: 'Event has been added!'
-      }
-    )
+  #   Bot.deliver(
+  #     recipient: message.sender,
+  #     message: {
+  #       text: 'Event has been added!'
+  #     }
+  #   )
 
   # when /more/i
   #   event_id = message.text.split(" ")[-1].to_i
@@ -64,27 +64,27 @@ Bot.on :message do |message|
   #     }
   #   )
 
-  when /all events/i
-    events = Event.all
-    events.each do |event|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
+  # when /all events/i
+  #   events = Event.all
+  #   events.each do |event|
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: event.mini_display
+  #       }
+  #     )
+  #   end
 
-  when /my events/i
-    user = User.find_by(facebook_id: message.sender["id"])
-    user.events.each do |event|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
+  # when /my events/i
+  #   user = User.find_by(facebook_id: message.sender["id"])
+  #   user.events.each do |event|
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: event.mini_display
+  #       }
+  #     )
+  #   end
 
   else
     Bot.deliver(

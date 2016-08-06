@@ -210,12 +210,6 @@ Bot.on :postback do |postback|
     ) 
   when /MORE_ALL_EVENTS/i
 
-    Bot.deliver(
-      recipient: postback.sender,
-      message: {
-        text: postback.payload.split("_")[-1]
-      }
-    ) 
     event_id = postback.payload.split("_")[-1].to_i
     events = Event.all.limit(5).offset(event_id)
     if events.length > 1

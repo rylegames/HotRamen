@@ -147,7 +147,7 @@ Bot.on :message do |message|
   when /all events/i
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
-    events = Event.all
+    events = Event.all.limit(5).offset(0)
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -169,7 +169,7 @@ Bot.on :message do |message|
               {
                 "type":"postback",
                 "title":"More Events",
-                "payload":"MORE_ALL_EVENTS"
+                "payload":"MORE_ALL_EVENTS_" + 5.to_s 
               }              
             ]
           }
@@ -206,6 +206,37 @@ Bot.on :postback do |postback|
     text = 'Oh.'
   when 'WELCOME_NEW_USER'
     text = "Welcome to upData, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
+  when /MORE_ALL_EVENTS/i
+    event_id = message.text.split(" ")[-1].to_i
+    events = Event.all.limit(5).offset(event_id)
+    events[0..-2].each do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
+
+    Bot.deliver(
+      recipient: message.sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": events[-1].mini_display,     
+            "buttons":[
+              {
+                "type":"postback",
+                "title":"More Events",
+                "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
+              }              
+            ]
+          }
+        }
+      }
+    )
   end
 
   Bot.deliver(

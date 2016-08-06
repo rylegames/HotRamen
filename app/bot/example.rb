@@ -169,7 +169,7 @@ Bot.on :message do |message|
               {
                 "type":"postback",
                 "title":"More Events",
-                "payload":"MORE_ALL_EVENTS_" + 5.to_s 
+                "payload":"MORE_ALL_EVENTS"#_" + 5.to_s 
               }              
             ]
           }

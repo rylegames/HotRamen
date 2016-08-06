@@ -208,7 +208,7 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
-  when /MORE_ALL_EVENTS_5/i
+  when 'MORE_ALL_EVENTS_5'
     event_id = postback.payload.text.split("_")[-1].to_i
     events = Event.all.limit(5).offset(event_id)
     if events.length > 1

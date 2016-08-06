@@ -223,25 +223,25 @@ Bot.on :postback do |postback|
       end
     end
 
-    Bot.deliver(
-      recipient: message.sender,
-      message:{
-        "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"button",
-            "text": events[-1].mini_display,     
-            "buttons":[
-              {
-                "type":"postback",
-                "title":"More Events",
-                "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
-              }              
-            ]
-          }
-        }
-      }
-    )
+    # Bot.deliver(
+    #   recipient: message.sender,
+    #   message:{
+    #     "attachment":{
+    #       "type":"template",
+    #       "payload":{
+    #         "template_type":"button",
+    #         "text": events[-1].mini_display,     
+    #         "buttons":[
+    #           {
+    #             "type":"postback",
+    #             "title":"More Events",
+    #             "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
+    #           }              
+    #         ]
+    #       }
+    #     }
+    #   }
+    # )
   end
 end
 

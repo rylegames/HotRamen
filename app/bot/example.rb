@@ -209,37 +209,43 @@ Bot.on :postback do |postback|
   when /MORE_ALL_EVENTS/i
     event_id = postback.payload.text.split("_")[-1].to_i
     events = Event.all.limit(5).offset(event_id)
-    
-    if events.length > 1
-      events[0..-2].each do |event|
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: event.mini_display
-          }
-        )
-      end
-    end
-
     Bot.deliver(
       recipient: message.sender,
-      message:{
-        "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"button",
-            "text": events[-1].mini_display,     
-            "buttons":[
-              {
-                "type":"postback",
-                "title":"More Events",
-                "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
-              }              
-            ]
-          }
-        }
+      message: {
+        text: event_id.to_s
       }
     )
+
+    # if events.length > 1
+    #   events[0..-2].each do |event|
+    #     Bot.deliver(
+    #       recipient: message.sender,
+    #       message: {
+    #         text: event.mini_display
+    #       }
+    #     )
+    #   end
+    # end
+
+    # Bot.deliver(
+    #   recipient: message.sender,
+    #   message:{
+    #     "attachment":{
+    #       "type":"template",
+    #       "payload":{
+    #         "template_type":"button",
+    #         "text": events[-1].mini_display,     
+    #         "buttons":[
+    #           {
+    #             "type":"postback",
+    #             "title":"More Events",
+    #             "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
+    #           }              
+    #         ]
+    #       }
+    #     }
+    #   }
+    # )
   end
 
   Bot.deliver(

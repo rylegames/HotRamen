@@ -213,7 +213,7 @@ Bot.on :postback do |postback|
     Bot.deliver(
       recipient: postback.sender,
       message: {
-        text: "af"
+        text: postback.payload.text.split("_")[-1]
       }
     ) 
     event_id = postback.payload.text.split("_")[-1].to_i

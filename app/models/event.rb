@@ -40,7 +40,7 @@ class Event < ApplicationRecord
 		# text = text + self.description + "\n" + self.location
 
 		description = self.description
-		if description > 315
+		if description.length > 315
 			new_text = Array.new
 			(1..desciption.length/315).each do |i|
 				new_text.push(description[315*(i-1)..315*(i)])

@@ -211,11 +211,10 @@ Bot.on :postback do |postback|
   when /MORE_ALL_EVENTS/i
 
     event_id = postback.payload.split("_")[-1].to_i
-    event = Event.first
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: event.first.mini_display
+        text: event_id.to_s
       }
     )
 

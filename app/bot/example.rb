@@ -211,15 +211,23 @@ Bot.on :postback do |postback|
   when /MORE_ALL_EVENTS/i
 
     event_id = postback.payload.split("_")[-1].to_i
-    events = Event.all.limit(5).offset(event_id)
-    events.each do |event|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
+    event = Event.first
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: event.first.mini_display
+      }
+    )
+
+    # events = Event.all.limit(5).offset(event_id)
+    # events.each do |event|
+    #   Bot.deliver(
+    #     recipient: message.sender,
+    #     message: {
+    #       text: event.mini_display
+    #     }
+    #   )
+    # end
 
 
     # if events.length > 1

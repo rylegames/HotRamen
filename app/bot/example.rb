@@ -156,28 +156,28 @@ Bot.on :message do |message|
       )
     end
 
-    Bot.deliver(
-      recipient: message.sender,
-      message:{
-        "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"generic",
-            "elements":[
-              {
-                "buttons":[
-                  {
-                    "type":"postback",
-                    "title":"More Events",
-                    "payload":"MORE_ALL_EVENTS"
-                  }              
-                ]
-              }
-            ]
-          }
-        }
-      }
-  )
+    # Bot.deliver(
+    #   recipient: message.sender,
+    #   message:{
+    #     "attachment":{
+    #       "type":"template",
+    #       "payload":{
+    #         "template_type":"generic",
+    #         "elements":[
+    #           {
+    #             "buttons":[
+    #               {
+    #                 "type":"postback",
+    #                 "title":"More Events",
+    #                 "payload":"MORE_ALL_EVENTS"
+    #               }              
+    #             ]
+    #           }
+    #         ]
+    #       }
+    #     }
+    #   }
+    # )
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

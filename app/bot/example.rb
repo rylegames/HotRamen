@@ -199,7 +199,7 @@ Bot.on :message do |message|
 end
 
 Bot.on :postback do |postback|
-  case postback.payload
+  case postback.payload.to_s
   when 'WELCOME_NEW_USER'
     text = "Welcome to upData, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
   when /MORE_ALL_EVENTS/i

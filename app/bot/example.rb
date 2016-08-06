@@ -208,7 +208,7 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
-  when 'MORE_ALL_EVENTS'
+  when /MORE_ALL_EVENTS/i
 
     event_id = postback.payload.split("_")[-1].to_i
     Bot.deliver(

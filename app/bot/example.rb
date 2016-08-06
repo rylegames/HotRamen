@@ -70,7 +70,7 @@ Bot.on :message do |message|
   when /add/i
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find_by(id: event_id)
+    event = Event.find(event_id)
     
     if event
       attendance = user.attend!(event_id)
@@ -104,7 +104,7 @@ Bot.on :message do |message|
 
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find_by(id: event_id)
+    event = Event.find(event_id)
 
     if event
       event.full_display.each do |text|
@@ -145,7 +145,8 @@ Bot.on :message do |message|
     end
 
   when /all events/i
-    events = Event.all
+    #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
+    events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
     events.each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -154,6 +155,29 @@ Bot.on :message do |message|
         }
       )
     end
+
+    Bot.deliver(
+      recipient: message.sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"generic",
+            "elements":[
+              {
+                "buttons":[
+                  {
+                    "type":"postback",
+                    "title":"More Events",
+                    "payload":"MORE_ALL_EVENTS"
+                  }              
+                ]
+              }
+            ]
+          }
+        }
+      }
+  )
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

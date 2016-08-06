@@ -8,7 +8,7 @@ class Event < ApplicationRecord
 		if self.title.length > 30
 			text = self.title[0..30].downcase + "\n"
 		else
-			text = self.title.downcase + " " * (30 - self.title.length) + "\n"
+			text = self.title + " " * (30 - self.title.length) + "\n"
 		end
 
 		begin_date = self.begin_date.strftime("%a, %b %-d%l:%M%P")

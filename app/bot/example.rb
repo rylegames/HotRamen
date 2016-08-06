@@ -213,10 +213,10 @@ Bot.on :postback do |postback|
     Bot.deliver(
       recipient: postback.sender,
       message: {
-        text: postback.payload.text.split("_")[-1]
+        text: postback.payload.split("_")[-1]
       }
     ) 
-    event_id = postback.payload.text.split("_")[-1].to_i
+    event_id = postback.payload.split("_")[-1].to_i
     events = Event.all.limit(5).offset(event_id)
     if events.length > 1
       events[0..-2].each do |event|

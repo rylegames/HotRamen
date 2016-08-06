@@ -32,25 +32,28 @@ class Event < ApplicationRecord
 	def full_display
 		text = self.title + "\n"
 
-		range = self.begin_date.strftime("%a, %b %-d%l:%M") + "-" + self.end_date.strftime("%l:%M")
+		range = self.begin_date.strftime("%a, %b %-d%l:%M") + " - " + self.end_date.strftime("%l:%M")
 		if self.id.to_s.length < (30 - range.to_s.length)
 			text = text + "ID: " + self.id.to_s + (" " * (30 - self.id.to_s.length - range.to_s.length)) + range.to_s+ "\n"
 		end
 
-		text = text + self.description + "\n" + self.location
+		# text = text + self.description + "\n" + self.location
 
-		if text.length > 315
+		description = self.description
+		if description > 315
 			new_text = Array.new
-			(1..text.length/315).each do |i|
-				new_text.push(text[315*(i-1)..315*(i)])
-				text = text[316..-1]
+			(1..desciption.length/315).each do |i|
+				new_text.push(description[315*(i-1)..315*(i)])
+				description = description[((315*i) + 1)..-1]
 			end
-			new_text.push(text)
+			new_text.push(description)
 
-			return new_text
+			return [text] + new_text
 		else
-			return [text]
+			return [text, description]
 		end
+
+
 
 	end
 

@@ -169,7 +169,7 @@ Bot.on :message do |message|
               {
                 "type":"postback",
                 "title":"More Events",
-                "payload":"MORE_ALL_EVENTS"#_" + 5.to_s 
+                "payload":"MORE_ALL_EVENTS"
               }              
             ]
           }
@@ -210,55 +210,49 @@ Bot.on :postback do |postback|
     ) 
   when 'MORE_ALL_EVENTS'
 
-    #event_id = postback.payload.split("_")[-1].to_i
+    event_id = postback.payload.split("_")[-1].to_i
+
+    events = Event.all.limit(5).offset(event_id)
+    events.each do |event|
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
+
+
+    if events.length > 1
+      events[0..-2].each do |event|
+        Bot.deliver(
+          recipient: postback.sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+      end
+    end
+
     Bot.deliver(
-      recipient: message.sender,
-      message: {
-        text: "asdf"
+      recipient: postback.sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": events[-1].mini_display,     
+            "buttons":[
+              {
+                "type":"postback",
+                "title":"More Events",
+                "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
+              }              
+            ]
+          }
+        }
       }
     )
-
-    # events = Event.all.limit(5).offset(event_id)
-    # events.each do |event|
-    #   Bot.deliver(
-    #     recipient: message.sender,
-    #     message: {
-    #       text: event.mini_display
-    #     }
-    #   )
-    # end
-
-
-    # if events.length > 1
-    #   events[0..-2].each do |event|
-    #     Bot.deliver(
-    #       recipient: message.sender,
-    #       message: {
-    #         text: event.mini_display
-    #       }
-    #     )
-    #   end
-    # end
-
-    # Bot.deliver(
-    #   recipient: message.sender,
-    #   message:{
-    #     "attachment":{
-    #       "type":"template",
-    #       "payload":{
-    #         "template_type":"button",
-    #         "text": events[-1].mini_display,     
-    #         "buttons":[
-    #           {
-    #             "type":"postback",
-    #             "title":"More Events",
-    #             "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
-    #           }              
-    #         ]
-    #       }
-    #     }
-    #   }
-    # )
   end
 end
 

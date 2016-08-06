@@ -38,7 +38,6 @@ class Event < ApplicationRecord
 		end
 
 		# text = text + self.description + "\n" + self.location
-
 		temp = self.description
 		if temp.length > 315
 			new_text = Array.new
@@ -52,8 +51,6 @@ class Event < ApplicationRecord
 		else
 			return [text, temp]
 		end
-
-
 
 	end
 

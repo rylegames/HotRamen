@@ -210,11 +210,11 @@ Bot.on :postback do |postback|
     ) 
   when /MORE_ALL_EVENTS/i
 
-    event_id = postback.payload.split("_")[-1].to_i
+    #event_id = postback.payload.split("_")[-1].to_i
     Bot.deliver(
       recipient: message.sender,
       message: {
-        text: event_id.to_s
+        text: "asdf"
       }
     )
 

@@ -34,23 +34,23 @@ class Event < ApplicationRecord
 
 		range = self.begin_date.strftime("%a, %b %-d%l:%M") + " - " + self.end_date.strftime("%l:%M")
 		if self.id.to_s.length < (30 - range.to_s.length)
-			text = text + "ID: " + self.id.to_s + (" " * (30 - self.id.to_s.length - range.to_s.length)) + range.to_s+ "\n"
+			text = text + "ID: " + self.id.to_s + (" " * (30 - self.id.to_s.length - range.to_s.length)) + range.to_s
 		end
 
 		# text = text + self.description + "\n" + self.location
 
-		description = self.description
-		if description.length > 315
+		temp = self.description
+		if temp.length > 315
 			new_text = Array.new
-			(1..desciption.length/315).each do |i|
-				new_text.push(description[315*(i-1)..315*(i)])
-				description = description[((315*i) + 1)..-1]
+			(1..temp.length/315).each do |i|
+				new_text.push(temp[315*(i-1)..315*(i)])
+				temp = temp[((315*i) + 1)..-1]
 			end
-			new_text.push(description)
+			new_text.push(temp)
 
 			return [text] + new_text
 		else
-			return [text, description]
+			return [text, temp]
 		end
 
 

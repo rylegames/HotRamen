@@ -208,7 +208,7 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
-  when /MORE_ALL_EVENTS_5/i
+  when /MORE_ALL_EVENTS/i
 
     Bot.deliver(
       recipient: postback.sender,

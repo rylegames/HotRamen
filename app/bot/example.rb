@@ -148,7 +148,7 @@ Bot.on :message do |message|
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
     events = Event.all
-    events.each do |event|
+    events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
         message: {
@@ -164,7 +164,7 @@ Bot.on :message do |message|
           "type":"template",
           "payload":{
             "template_type":"button",
-            "text":"asdf",     
+            "text": events[-1].mini_display,     
             "buttons":[
               {
                 "type":"postback",

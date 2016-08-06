@@ -164,7 +164,7 @@ Bot.on :message do |message|
           "type":"template",
           "payload":{
             "template_type":"button",
-            "text":"",     
+            "text":"asdf",     
             "buttons":[
               {
                 "type":"postback",

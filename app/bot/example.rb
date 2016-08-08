@@ -82,6 +82,16 @@ Bot.on :message do |message|
           text: 'Event has been added!'
         }
       )
+
+      if user.events.size == 0:
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "You've added your first event to your schedule! Text 'my events' again to see your entire schedule!"
+          }
+        )
+      end
+
     else
       Bot.deliver(
         recipient: message.sender,

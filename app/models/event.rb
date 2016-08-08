@@ -22,7 +22,11 @@ class Event < ApplicationRecord
 			text = text + self.description + " " * (30 - self.description.length) + "\n"
 		end
 
-		text = text + self.location
+		if self.location.length > 30
+			text = text + self.location[0..30] + "\n"
+		else
+			text = text + self.location + " " * (30 - self.location.length) + "\n"
+		end
 
 		#text = text + event.description + "\n" + event.location
 

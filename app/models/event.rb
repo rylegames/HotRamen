@@ -43,13 +43,9 @@ class Event < ApplicationRecord
 
 		# text = text + self.description + "\n" + self.location
 		temp = self.description
-		if temp.length > 315
-			new_text = Array.new
-			(1..temp.length/315).each do |i|
-				new_text.push(temp[315*(i-1)..315*(i)])
-				temp = temp[((315*i) + 1)..-1]
-			end
-			new_text.push(temp)
+
+		if temp.length > 320
+			new_text = temp.scan(/.{1,320}/)
 
 			return [text] + new_text
 		else

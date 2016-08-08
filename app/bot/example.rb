@@ -83,7 +83,7 @@ Bot.on :message do |message|
         }
       )
 
-      if user.events.size == 1
+      if user.events.size == 0
         Bot.deliver(
           recipient: message.sender,
           message: {
@@ -117,6 +117,7 @@ Bot.on :message do |message|
     event = Event.find(event_id)
 
     if event
+      puts "show event #{event.id}"
       event.full_display.each do |text|
         Bot.deliver(
           recipient: message.sender,
@@ -126,24 +127,26 @@ Bot.on :message do |message|
         )
       end
 
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          "attachment": {
-            "type": "template",
-            "payload": {
-              "template_type": "generic",
-              "elements": {
-                "element": {
-                  "title": event.location,
-                  "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                  "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+      if event.latitude
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            "attachment": {
+              "type": "template",
+              "payload": {
+                "template_type": "generic",
+                "elements": {
+                  "element": {
+                    "title": event.location,
+                    "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                    "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+                  }
                 }
               }
             }
           }
-        }
-      )
+        )
+      end
 
     else
       Bot.deliver(

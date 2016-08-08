@@ -6,7 +6,7 @@ class Event < ApplicationRecord
 	def mini_display
 		#event = Event.find_by(event_id: event_id)
 		if self.title.length > 30
-			text = self.title[0..30].downcase + "\n"
+			text = self.title[0..30] + "\n"
 		else
 			text = self.title + " " * (30 - self.title.length) + "\n"
 		end

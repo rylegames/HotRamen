@@ -16,11 +16,11 @@ class Event < ApplicationRecord
 			text = text + "ID: " + self.id.to_s + (" " * (30 - self.id.to_s.length - begin_date.to_s.length)) + begin_date.to_s+ "\n"
 		end
 
-		if self.description.length > 30
-			text = text + self.description[0..30] + "\n"
-		else
-			text = text + self.description + " " * (30 - self.description.length) + "\n"
-		end
+		# if self.description.length > 30
+		# 	text = text + self.description[0..30] + "\n"
+		# else
+		# 	text = text + self.description + " " * (30 - self.description.length) + "\n"
+		# end
 
 		if self.location.length > 30
 			text = text + self.location[0..30] + "\n"

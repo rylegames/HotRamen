@@ -91,58 +91,58 @@ Bot.on :message do |message|
       )
     end
 
-  # when /delete/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   event_id = message.text.split(" ")[-1].to_i
-  #   user.unattend(event_id)
-  #   Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'Event has been deleted!'
-  #       }
-  #     )
+  when /delete/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    event_id = message.text.split(" ")[-1].to_i
+    user.unattend(event_id)
+    Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'Event has been deleted!'
+        }
+      )
 
-  # when /show/i
-  #   event_id = message.text.split(" ")[-1].to_i
-  #   event = Event.find(event_id)
+  when /show/i
+    event_id = message.text.split(" ")[-1].to_i
+    event = Event.find(event_id)
 
-  #   if event
-  #     event.full_display.each do |text|
-  #       Bot.deliver(
-  #         recipient: message.sender,
-  #         message: {
-  #           text: text
-  #         }
-  #       )
-  #     end
+    if event
+      event.full_display.each do |text|
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: text
+          }
+        )
+      end
 
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         "attachment": {
-  #           "type": "template",
-  #           "payload": {
-  #             "template_type": "generic",
-  #             "elements": {
-  #               "element": {
-  #                 "title": event.location,
-  #                 "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=25&markers="+event.latitude.to_s+","+event.longitude.to_s,
-  #                 "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
-  #               }
-  #             }
-  #           }
-  #         }
-  #       }
-  #     )
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          "attachment": {
+            "type": "template",
+            "payload": {
+              "template_type": "generic",
+              "elements": {
+                "element": {
+                  "title": event.location,
+                  "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=25&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                  "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+                }
+              }
+            }
+          }
+        }
+      )
 
-  #   else
-  #     Bot.deliver(
-  #         recipient: message.sender,
-  #         message: {
-  #           text: "Couldn't find that event. Double check the event number"
-  #         }
-  #       )
-  #   end
+    else
+      Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Couldn't find that event. Double check the event number"
+          }
+        )
+    end
 
   when /all events/i
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
@@ -254,7 +254,7 @@ Bot.on :postback do |postback|
             "buttons":[
               {
                 "type":"postback",
-                "title":"MORE_ALL_EVENTS_" + (event_id + 5).to_s ,
+                "title":"More Events",
                 "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
               }              
             ]

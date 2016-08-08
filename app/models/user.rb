@@ -7,7 +7,10 @@ class User < ApplicationRecord
 	validates :facebook_id, presence: true
 
 	def attend!(new_event_id)
-		attendances.create!(event_id: new_event_id)
+		attendance = attendances.find_by(event_id: new_event_id)
+		unless attendance 
+			attendances.create!(event_id: new_event_id)
+		end
 	end
 
 	def unattend(new_event_id)

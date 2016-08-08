@@ -47,49 +47,49 @@ Bot.on :message do |message|
       )
     end
 
-  when /new account/i
-    begin
-      user = User.new(facebook_id: message.sender["id"])
-      user.save
-
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'created!'
-        }
-      )
-    catch
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'failed!'
-        }
-      )
-    end
-
-  # when /add/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   event_id = message.text.split(" ")[-1].to_i
-  #   event = Event.find(event_id)
-    
-  #   if event
-  #     attendance = user.attend!(event_id)
-  #     attendance.save
+  # when /new account/i
+  #   begin
+  #     user = User.new(facebook_id: message.sender["id"])
+  #     user.save
 
   #     Bot.deliver(
   #       recipient: message.sender,
   #       message: {
-  #         text: 'Event has been added!'
+  #         text: 'created!'
   #       }
   #     )
-  #   else
+  #   catch
   #     Bot.deliver(
   #       recipient: message.sender,
   #       message: {
-  #         text: "Couldn't find that event. Double check the event number"
+  #         text: 'failed!'
   #       }
   #     )
   #   end
+
+  when /add/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    event_id = message.text.split(" ")[-1].to_i
+    event = Event.find(event_id)
+    
+    if event
+      attendance = user.attend!(event_id)
+      attendance.save
+
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'Event has been added!'
+        }
+      )
+    else
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "Couldn't find that event. Double check the event number"
+        }
+      )
+    end
 
   # when /delete/i
   #   user = User.find_by(facebook_id: message.sender["id"])
@@ -144,47 +144,47 @@ Bot.on :message do |message|
   #       )
   #   end
 
-  # when /all events/i
-  #   #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
-  #   #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
-  #   events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
-  #   events[0..-2].each do |event|
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: event.mini_display
-  #       }
-  #     )
-  #   end
+  when /all events/i
+    #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
+    #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
+    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
+    events[0..-2].each do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
 
-  #   Bot.deliver(
-  #     recipient: message.sender,
-  #     message:{
-  #       "attachment":{
-  #         "type":"template",
-  #         "payload":{
-  #           "template_type":"button",
-  #           "text": events[-1].mini_display,     
-  #           "buttons":[
-  #             {
-  #               "type":"postback",
-  #               "title":"More Events",
-  #               "payload":"MORE_ALL_EVENTS_" + 5.to_s
-  #             }              
-  #           ]
-  #         }
-  #       }
-  #     }
-  #   )
+    Bot.deliver(
+      recipient: message.sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": events[-1].mini_display,     
+            "buttons":[
+              {
+                "type":"postback",
+                "title":"More Events",
+                "payload":"MORE_ALL_EVENTS_" + 5.to_s
+              }              
+            ]
+          }
+        }
+      }
+    )
 
-  #   if User.find_by(facebook_id: message.sender["id"]).events.size == 0
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: "adsf"
-  #       }
-  #     )
-  #   end
+    # if User.find_by(facebook_id: message.sender["id"]).events.size == 0
+    #   Bot.deliver(
+    #     recipient: message.sender,
+    #     message: {
+    #       text: "adsf"
+    #     }
+    #   )
+    # end
 
   # when /my events/i
   #   user = User.find_by(facebook_id: message.sender["id"])
@@ -205,15 +205,6 @@ Bot.on :message do |message|
   #         }
   #       )
   #   end
-
-  # when /get started/i
-  #   User.create(facebook_id: message.sender["id"]) unless User.find_by(facebook_id: message.sender["id"])
-  #   Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: "New user."
-  #       }
-  #     )
 
   else
     Bot.deliver(

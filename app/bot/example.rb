@@ -208,50 +208,50 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
-  # when /MORE_ALL_EVENTS/i
+  when /MORE_ALL_EVENTS/i
 
-  #   event_id = postback.payload.split("_")[-1].to_i
-  #   events = Event.all.limit(5).offset(event_id)
-  #   # events.each do |event|
-  #   #   Bot.deliver(
-  #   #     recipient: postback.sender,
-  #   #     message: {
-  #   #       text: event.mini_display
-  #   #     }
-  #   #   )
-  #   # end
+    event_id = postback.payload.split("_")[-1].to_i
+    events = Event.all.limit(5).offset(event_id)
+    # events.each do |event|
+    #   Bot.deliver(
+    #     recipient: postback.sender,
+    #     message: {
+    #       text: event.mini_display
+    #     }
+    #   )
+    # end
 
 
-  #   if events.length > 1
-  #     events[0..-2].each do |event|
-  #       Bot.deliver(
-  #         recipient: postback.sender,
-  #         message: {
-  #           text: event.mini_display
-  #         }
-  #       )
-  #     end
-  #   end
+    if events.length > 1
+      events[0..-2].each do |event|
+        Bot.deliver(
+          recipient: postback.sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+      end
+    end
 
-  #   Bot.deliver(
-  #     recipient: postback.sender,
-  #     message:{
-  #       "attachment":{
-  #         "type":"template",
-  #         "payload":{
-  #           "template_type":"button",
-  #           "text": events[-1].mini_display,     
-  #           "buttons":[
-  #             {
-  #               "type":"postback",
-  #               "title":"More Events",
-  #               "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
-  #             }              
-  #           ]
-  #         }
-  #       }
-  #     }
-  #   )
+    Bot.deliver(
+      recipient: postback.sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": events[-1].mini_display,     
+            "buttons":[
+              {
+                "type":"postback",
+                "title":"More Events",
+                "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
+              }              
+            ]
+          }
+        }
+      }
+    )
   end
 end
 

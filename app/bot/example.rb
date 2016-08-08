@@ -179,13 +179,22 @@ Bot.on :message do |message|
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
-    user.events.each do |event|
+    if user.events
+      user.events.each do |event|
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+      end
+    else
       Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
+          recipient: message.sender,
+          message: {
+            text: "Looks like you haven't added any events to your schedule. Text 'all events' to see what's going on!"
+          }
+        )
     end
 
   else

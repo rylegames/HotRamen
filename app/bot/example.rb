@@ -254,7 +254,7 @@ Bot.on :postback do |postback|
             "buttons":[
               {
                 "type":"postback",
-                "title":"More Events",
+                "title":"MORE_ALL_EVENTS_" + (event_id + 5).to_s ,
                 "payload":"MORE_ALL_EVENTS_" + (event_id + 5).to_s 
               }              
             ]

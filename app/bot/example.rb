@@ -178,7 +178,7 @@ Bot.on :message do |message|
       }
     )
 
-    if User.find_by(facebook_id: message.sender["id"]).events.size == 0:
+    if User.find_by(facebook_id: message.sender["id"]).events.size == 0
       Bot.deliver(
         recipient: message.sender,
         message: {
@@ -215,7 +215,6 @@ Bot.on :message do |message|
           text: "New user."
         }
       )
-    end
 
   else
     Bot.deliver(

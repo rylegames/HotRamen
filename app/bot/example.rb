@@ -149,6 +149,7 @@ Bot.on :message do |message|
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
     events[0..-2].each do |event|
+      sleep(0.2)
       Bot.deliver(
         recipient: message.sender,
         message: {
@@ -177,6 +178,10 @@ Bot.on :message do |message|
       }
     )
 
+    if User.find_by(facebook_id: message.sender["id"]).events.size == 0:
+
+    end
+
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
     if user and user.events.size > 0
@@ -192,7 +197,7 @@ Bot.on :message do |message|
       Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Looks like you haven't added any events to your schedule. Text 'all events' to see what's going on!"
+            text: "Looks like you haven't added any events to your schedule.\nText 'all events' and see what's going on!"
           }
         )
     end

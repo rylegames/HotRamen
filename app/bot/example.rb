@@ -202,6 +202,16 @@ Bot.on :message do |message|
         )
     end
 
+  when /get started/i
+    User.create(facebook_id: message.sender["id"]) unless User.find_by(facebook_id: message.sender["id"])
+    Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "New user."
+        }
+      )
+    end
+
   else
     Bot.deliver(
       recipient: message.sender,

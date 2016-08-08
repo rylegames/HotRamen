@@ -38,34 +38,34 @@ Bot.on :message do |message|
       "'delete 1' -> delete event in your schedule, in this case 1",
       "'help' -> Here's the list of commands ..."]
 
-  #   text.each do |piece|
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: piece
-  #       }
-  #     )
-  #   end
+    text.each do |piece|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: piece
+        }
+      )
+    end
 
-  # when /new account/i
-  #   begin
-  #     user = User.new(facebook_id: message.sender["id"])
-  #     user.save
+  when /new account/i
+    begin
+      user = User.new(facebook_id: message.sender["id"])
+      user.save
 
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'created!'
-  #       }
-  #     )
-  #   catch
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'failed!'
-  #       }
-  #     )
-  #   end
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'created!'
+        }
+      )
+    catch
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'failed!'
+        }
+      )
+    end
 
   # when /add/i
   #   user = User.find_by(facebook_id: message.sender["id"])

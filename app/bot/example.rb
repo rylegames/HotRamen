@@ -67,29 +67,29 @@ Bot.on :message do |message|
       )
     end
 
-  when /add/i
-    user = User.find_by(facebook_id: message.sender["id"])
-    event_id = message.text.split(" ")[-1].to_i
-    event = Event.find(event_id)
+  # when /add/i
+  #   user = User.find_by(facebook_id: message.sender["id"])
+  #   event_id = message.text.split(" ")[-1].to_i
+  #   event = Event.find(event_id)
     
-    if event
-      attendance = user.attend!(event_id)
-      attendance.save
+  #   if event
+  #     attendance = user.attend!(event_id)
+  #     attendance.save
 
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'Event has been added!'
-        }
-      )
-    else
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: "Couldn't find that event. Double check the event number"
-        }
-      )
-    end
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: 'Event has been added!'
+  #       }
+  #     )
+  #   else
+  #     Bot.deliver(
+  #       recipient: message.sender,
+  #       message: {
+  #         text: "Couldn't find that event. Double check the event number"
+  #       }
+  #     )
+  #   end
 
   when /delete/i
     user = User.find_by(facebook_id: message.sender["id"])
@@ -147,7 +147,7 @@ Bot.on :message do |message|
   when /all events/i
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
-    events = Event.all.limit(5).offset(0)
+    events = Event.limit(5).offset(0)
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,

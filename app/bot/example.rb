@@ -166,7 +166,20 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: event.mini_display
+          "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"button",
+              "text": events[-1].mini_display,     
+              "buttons":[
+                {
+                  "type":"postback",
+                  "title":"Show Description",
+                  "payload":"SHOW_" + event.id.to_s
+                }              
+              ]
+            }
+          }
         }
       )
     end
@@ -276,7 +289,21 @@ Bot.on :postback do |postback|
         }
       }
     )
+
+  when /SHOW/i
+    event_id = postback.payload.split("_")[-1].to_i
+    event = Event.find(event_id)
+    event.full_display.each do |text|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: text
+        }
+      )
+    end
+
   end
+
 end
 
 Bot.on :delivery do |delivery|

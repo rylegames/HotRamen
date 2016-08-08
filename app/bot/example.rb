@@ -177,14 +177,14 @@ Bot.on :message do |message|
       }
     )
 
-    # if User.find_by(facebook_id: message.sender["id"]).events.size == 0
-    #   Bot.deliver(
-    #     recipient: message.sender,
-    #     message: {
-    #       text: "adsf"
-    #     }
-    #   )
-    # end
+    if User.find_by(facebook_id: message.sender["id"]).events.size == 0
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "All events have a unique ID number right under the title. Text 'Add' and the ID number of an event, such as 'Add 7' to add the event to your schedule."
+        }
+      )
+    end
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

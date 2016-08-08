@@ -147,7 +147,7 @@ Bot.on :message do |message|
   when /all events/i
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
-    events = Event.order(:begin_date).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
+    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -177,25 +177,25 @@ Bot.on :message do |message|
       }
     )
 
-  # when /my events/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   if user.events.size > 0
-  #     user.events.each do |event|
-  #       Bot.deliver(
-  #         recipient: message.sender,
-  #         message: {
-  #           text: event.mini_display
-  #         }
-  #       )
-  #     end
-  #   else
-  #     Bot.deliver(
-  #         recipient: message.sender,
-  #         message: {
-  #           text: "Looks like you haven't added any events to your schedule. Text 'all events' to see what's going on!"
-  #         }
-  #       )
-  #   end
+  when /my events/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    if user.events.size > 0
+      user.events.each do |event|
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+      end
+    else
+      Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Looks like you haven't added any events to your schedule. Text 'all events' to see what's going on!"
+          }
+        )
+    end
 
   else
     Bot.deliver(
@@ -221,15 +221,6 @@ Bot.on :postback do |postback|
 
     event_id = postback.payload.split("_")[-1].to_i
     events = Event.all.limit(5).offset(event_id)
-    # events.each do |event|
-    #   Bot.deliver(
-    #     recipient: postback.sender,
-    #     message: {
-    #       text: event.mini_display
-    #     }
-    #   )
-    # end
-
 
     if events.length > 1
       events[0..-2].each do |event|

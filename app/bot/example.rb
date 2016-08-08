@@ -83,7 +83,7 @@ Bot.on :message do |message|
         }
       )
 
-      if user.events.size == 0:
+      if user.events.size == 0
         Bot.deliver(
           recipient: message.sender,
           message: {
@@ -158,6 +158,7 @@ Bot.on :message do |message|
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
+    user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -187,7 +188,7 @@ Bot.on :message do |message|
       }
     )
 
-    if User.find_by(facebook_id: message.sender["id"]).events.size == 0
+    if user.events.size == 0
       Bot.deliver(
         recipient: message.sender,
         message: {

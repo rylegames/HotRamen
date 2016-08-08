@@ -147,7 +147,7 @@ Bot.on :message do |message|
   when /all events/i
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
     #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
-    events = Event.limit(5).offset(0)
+    events = Event.order(:begin_date).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,

@@ -179,7 +179,7 @@ Bot.on :message do |message|
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
-    if user.events.size > 0
+    if user and user.events.size > 0
       user.events.each do |event|
         Bot.deliver(
           recipient: message.sender,

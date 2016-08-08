@@ -179,7 +179,12 @@ Bot.on :message do |message|
     )
 
     if User.find_by(facebook_id: message.sender["id"]).events.size == 0:
-
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "adsf"
+        }
+      )
     end
 
   when /my events/i

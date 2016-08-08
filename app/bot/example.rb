@@ -252,7 +252,7 @@ Bot.on :postback do |postback|
   #       }
   #     }
   #   )
-  # end
+  end
 end
 
 Bot.on :delivery do |delivery|

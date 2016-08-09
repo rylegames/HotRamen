@@ -28,7 +28,6 @@ Bot.on :message do |message|
         text: 'Hello, human!'
       }
     )
-
   when /help/i
     text = ["Here's the list of commands",
       "'all events' -> display all upcoming events",
@@ -46,28 +45,8 @@ Bot.on :message do |message|
         }
       )
     end
-
-  # when /new account/i
-  #   begin
-  #     user = User.new(facebook_id: message.sender["id"])
-  #     user.save
-
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'created!'
-  #       }
-  #     )
-  #   catch
-  #     Bot.deliver(
-  #       recipient: message.sender,
-  #       message: {
-  #         text: 'failed!'
-  #       }
-  #     )
-  #   end
-
   when /add/i
+
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)
@@ -100,7 +79,6 @@ Bot.on :message do |message|
         }
       )
     end
-
   when /delete/i
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
@@ -111,7 +89,6 @@ Bot.on :message do |message|
           text: 'Event has been deleted!'
         }
       )
-
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)
@@ -134,13 +111,24 @@ Bot.on :message do |message|
             "type": "template",
             "payload": {
               "template_type": "generic",
-              "elements": {
-                "element": {
-                  "title": event.location,
-                  "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                  "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+              "elements": [
+                {
+                  "element": {
+                    "title": event.location,
+                    "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                    "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+                  }
+                },
+                {
+                  "buttons":[
+                    {
+                      "type":"postback",
+                      "title":"Add This Event",
+                      "payload":"ADD_" + event.id.to_s
+                    }              
+                  ]
                 }
-              }
+              ]
             }
           }
         }
@@ -156,8 +144,6 @@ Bot.on :message do |message|
     end
 
   when /all events/i
-    #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').take(5)
-    #events = Event.all.where('begin_date > ?', DateTime.current - 30.minutes).take(5)
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
     user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
@@ -173,7 +159,7 @@ Bot.on :message do |message|
                 {
                   "type":"postback",
                   "title":"Show Description",
-                  "payload":"SHOW_" + event.id.to_s
+                  "payload":"ADD_" + event.id.to_s
                 }              
               ]
             }
@@ -272,7 +258,7 @@ Bot.on :postback do |postback|
       recipient: postback.sender,
       message:{
         "attachment":{
-          "type":"template",
+          "type": "template",
           "payload":{
             "template_type":"button",
             "text": events[-1].mini_display,     
@@ -301,6 +287,25 @@ Bot.on :postback do |postback|
     end
 
   end
+
+  Bot.deliver(
+    recipient: message.sender,
+    message: {
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": {
+            "element": {
+              "title": event.location,
+              "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+              "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+            }
+          }
+        }
+      }
+    }
+  )
 
 end
 

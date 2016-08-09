@@ -137,21 +137,9 @@ Bot.on :message do |message|
     user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
-          "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "generic",
-            "elements": {
-              "element": {
-                "title": event.location,
-                "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
-                }
-              }
-            }
-          }
+          text: event.mini_display
         }
       )
     end

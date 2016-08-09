@@ -133,7 +133,7 @@ Bot.on :message do |message|
     end
 
   when /all events/i
-    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).limit(5).offset(0)
+    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(0)
     user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
@@ -217,7 +217,8 @@ Bot.on :postback do |postback|
   when /MORE_ALL_EVENTS/i
 
     event_id = postback.payload.split("_")[-1].to_i
-    events = Event.all.limit(5).offset(event_id)
+    events = Event.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
+    #events = Event.order('id asc').limit(5).offset(event_id)
 
     if events.length > 1
       events[0..-2].each do |event|

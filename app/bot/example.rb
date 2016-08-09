@@ -12,6 +12,7 @@ require 'facebook/messenger'
 
 Facebook::Messenger.configure do |config|
   config.access_token = ENV['ACCESS_TOKEN']
+  config.app_secret =  ENV['FB_APP_SECRET_TOKEN']
   config.verify_token = ENV['VERIFY_TOKEN']
 end
 
@@ -207,7 +208,8 @@ end
 Bot.on :postback do |postback|
   case postback.payload
   when 'WELCOME_NEW_USER'
-    text = "Welcome to upData, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
+    User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
+    text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
       message: {

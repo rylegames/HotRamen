@@ -1,7 +1,7 @@
 class MessengerBotController < ActionController::Base
   def message(event, sender)
     # profile = sender.get_profile(field) # default field [:locale, :timezone, :gender, :first_name, :last_name, :profile_pic]
-    sender.reply({ text: "Reply: #{event['message']['text']}" })
+    sender.reply({ text: "Reply: asdf}" })
   end
 
   def delivery(event, sender)

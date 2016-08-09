@@ -79,7 +79,6 @@ Bot.on :message do |message|
         }
       )
     end
-
   when /delete/i
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
@@ -145,13 +144,13 @@ Bot.on :message do |message|
             "payload":{
               "template_type":"button",
               "text": event.mini_display,     
-              "buttons":[
-                {
-                  "type":"postback",
-                  "title":"Show Description",
-                  "payload":"SHOW_" + event.id.to_s
-                }              
-              ]
+              # "buttons":[
+              #   {
+              #     "type":"postback",
+              #     "title":"Show Description",
+              #     "payload":"SHOW_" + event.id.to_s
+              #   }              
+              # ]
             }
           }
         }

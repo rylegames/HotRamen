@@ -111,24 +111,13 @@ Bot.on :message do |message|
             "type": "template",
             "payload": {
               "template_type": "generic",
-              "elements": [
-                {
-                  "element": {
-                    "title": event.location,
-                    "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                    "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
-                  }
-                },
-                {
-                  "buttons":[
-                    {
-                      "type":"postback",
-                      "title":"Add This Event",
-                      "payload":"ADD_" + event.id.to_s
-                    }              
-                  ]
+              "elements": {
+                "element": {
+                  "title": event.location,
+                  "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                  "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
                 }
-              ]
+              }
             }
           }
         }
@@ -159,7 +148,7 @@ Bot.on :message do |message|
                 {
                   "type":"postback",
                   "title":"Show Description",
-                  "payload":"ADD_" + event.id.to_s
+                  "payload":"SHOW_" + event.id.to_s
                 }              
               ]
             }

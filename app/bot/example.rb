@@ -295,7 +295,7 @@ Bot.on :postback do |postback|
     event = Event.find(event_id)
     event.full_display.each do |text|
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
           text: text
         }

@@ -9,6 +9,7 @@ require 'facebook/messenger'
 #     }
 #   ]
 # }' "https://graph.facebook.com/v2.6/me/thread_settings?access_token=EAASmNgjGL9sBAEjNsWIuB1SDX1VjExN9NgBWGNP4kl0ZC3wk3XdOuhQ4Ee2JH0KlzG2QKMrer7MbwEZCpryAUnWjzXTsFs4ZB8KG9NZA9EX772lIXUuHYEHHHN9l5PQ7awdqUttfkXMzJBzks8v17h1ZC5ZCmqyf7tco4RHODtzQZDZD"      
+Facebook::Messenger::Subscriptions.subscribe
 
 Facebook::Messenger.configure do |config|
   config.access_token = ENV['ACCESS_TOKEN']

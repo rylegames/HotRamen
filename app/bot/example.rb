@@ -137,7 +137,7 @@ Bot.on :message do |message|
     user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
-        recipient: postback.sender,
+        recipient: message.sender,
         message: {
           text: event.mini_display
         }

@@ -139,18 +139,17 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          "attachment":{
-            "type":"template",
-            "payload":{
-              "template_type":"button",
-              "text": event.mini_display,     
-              # "buttons":[
-              #   {
-              #     "type":"postback",
-              #     "title":"Show Description",
-              #     "payload":"SHOW_" + event.id.to_s
-              #   }              
-              # ]
+          "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": {
+              "element": {
+                "title": event.location,
+                "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+                }
+              }
             }
           }
         }

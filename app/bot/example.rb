@@ -170,7 +170,7 @@ Bot.on :message do |message|
             "type":"template",
             "payload":{
               "template_type":"button",
-              "text": events[-1].mini_display,     
+              "text": event.mini_display,     
               "buttons":[
                 {
                   "type":"postback",

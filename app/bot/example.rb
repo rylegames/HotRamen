@@ -30,10 +30,10 @@ Bot.on :message do |message|
     )
   when /help/i
     text = "Hello! I'm here to tell you everything going on. 
-    • all events 
-    • my events
+• all events 
+• my events
 
-    For each event, you can add, delete, and show. For example, here's what you can do with an event of ID num 7.
+For each event, you can add, delete, and show. For example, here's what you can do with an event of ID num 7.
     • add 7
     • delete 7
     • show 7
@@ -180,7 +180,7 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: "All events have a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+          text: "So much fun stuff! 'All events' shows you events that started within the last 30 minutes. Each events have a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
         }
       )
     end

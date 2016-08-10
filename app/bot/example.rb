@@ -29,22 +29,23 @@ Bot.on :message do |message|
       }
     )
   when /help/i
-    text = ["Here's the list of commands",
-      "'all events' -> display all upcoming events",
-      "'my events' -> display my events in schedule",
-      "'show 1' -> show info of event with id, in this case 1",
-      "'add 1' -> add event to your schedule, in this case 1",
-      "'delete 1' -> delete event in your schedule, in this case 1",
-      "'help' -> Here's the list of commands ..."]
+    text = "Hello! I'm here to tell you everything going on. 
+             • all events 
+             • my events
 
-    text.each do |piece|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: piece
-        }
-      )
-    end
+            For each event, you can add, delete, and show. For example, here's what you can ask for an event with ID num 7.
+             • add 7
+             • delete 7
+             • show 7
+          "
+
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: text
+      }
+    )
+
   when /add/i
 
     user = User.find_by(facebook_id: message.sender["id"])
@@ -66,7 +67,7 @@ Bot.on :message do |message|
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "You've added your first event to your schedule! Text 'my events' again to see your entire schedule!"
+            text: "You've added your first event! Text 'my events' to see your entire schedule!"
           }
         )
       end
@@ -92,7 +93,7 @@ Bot.on :message do |message|
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)  if event_id != 0
-
+    user = User.find_by(facebook_id: message.sender["id"])
     if event
       puts "show event #{event.id}"
       event.full_display.each do |text|
@@ -123,13 +124,22 @@ Bot.on :message do |message|
         }
       )
 
-    else
-      Bot.deliver(
+      if user.events.size == 0
+        Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Couldn't find that event. Double check the event number"
+            text: "Pretty cool huh? Text 'add' and the event ID number to add it to your schedule!"
           }
         )
+      end
+
+    else
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "Couldn't find that event. Double check the event number"
+        }
+      )
     end
 
   when /all events/i
@@ -168,7 +178,7 @@ Bot.on :message do |message|
       Bot.deliver(
         recipient: message.sender,
         message: {
-          text: "All events have a unique ID number right under the title. Text 'Add' and the ID number of an event, such as 'Add 7' to add the event to your schedule."
+          text: "All events have a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
         }
       )
     end
@@ -182,6 +192,14 @@ Bot.on :message do |message|
           recipient: message.sender,
           message: {
             text: event.mini_display
+          }
+        )
+      end
+      if events.size == 1
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "You're all set! Welcome aboard and have fun at orientation!"
           }
         )
       end
@@ -209,7 +227,7 @@ Bot.on :postback do |postback|
   when 'WELCOME_NEW_USER'
     user = User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
     user.save
-    text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
+    text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
       message: {

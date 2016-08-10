@@ -49,7 +49,7 @@ Bot.on :message do |message|
 
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find(event_id)
+    event = Event.find(event_id) if event_id != 0
     
     if event
       attendance = user.attend!(event_id)
@@ -82,7 +82,7 @@ Bot.on :message do |message|
   when /delete/i
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
-    user.unattend(event_id)
+    user.unattend(event_id) if event_id != 0
     Bot.deliver(
         recipient: message.sender,
         message: {
@@ -91,7 +91,7 @@ Bot.on :message do |message|
       )
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find(event_id)
+    event = Event.find(event_id)  if event_id != 0
 
     if event
       puts "show event #{event.id}"
@@ -175,7 +175,6 @@ Bot.on :message do |message|
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
-    user.save
     events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')
     if user and events.size > 0
       events.each do |event|
@@ -208,7 +207,8 @@ end
 Bot.on :postback do |postback|
   case postback.payload
   when 'WELCOME_NEW_USER'
-    User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
+    user = User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
+    user.save
     text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by your classmate Ryan Lee '20. Text 'my events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,

@@ -30,13 +30,15 @@ Bot.on :message do |message|
     )
   when /help/i
     text = "Hello! I'm here to tell you everything going on. 
-             • all events 
-             • my events
+    • all events 
+    • my events
 
-            For each event, you can add, delete, and show. For example, here's what you can ask for an event with ID num 7.
-             • add 7
-             • delete 7
-             • show 7
+    For each event, you can add, delete, and show. For example, here's what you can do with an event of ID num 7.
+    • add 7
+    • delete 7
+    • show 7
+
+    Hope this was helpful!
           "
 
     Bot.deliver(

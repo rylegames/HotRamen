@@ -214,6 +214,21 @@ Hope this was helpful!
         )
     end
 
+  when /search/i
+    user = User.find_by(facebook_id: message.sender["id"])
+    term = message.text.slice! "search "
+    events = user.events.where('title ~= ?', term)
+    if user and events.size > 0
+      events.each do |event|
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+      end
+    end
+
   else
     Bot.deliver(
       recipient: message.sender,

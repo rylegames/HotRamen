@@ -33,7 +33,7 @@ Bot.on :message do |message|
 • all events 
 • my events
 
-For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with an event of ID num 7.
+For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.
 • add 7
 • delete 7
 • show 7

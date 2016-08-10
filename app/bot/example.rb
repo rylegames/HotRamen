@@ -63,7 +63,7 @@ Bot.on :message do |message|
         }
       )
 
-      if user.events.size == 0
+      if user.events.size == 1
         Bot.deliver(
           recipient: message.sender,
           message: {

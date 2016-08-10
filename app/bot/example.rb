@@ -226,7 +226,6 @@ Bot.on :postback do |postback|
   case postback.payload
   when 'WELCOME_NEW_USER'
     user = User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
-    user.save
     text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,

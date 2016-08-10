@@ -175,6 +175,7 @@ Bot.on :message do |message|
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
+    user.save
     events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')
     if user and events.size > 0
       events.each do |event|

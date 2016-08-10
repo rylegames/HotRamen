@@ -1,9 +1,7 @@
 Rails.application.routes.draw do
-  get 'events/new'
+  
+  get 'privacy' => 'static_pages#privacy'
 
-  get 'attendances/new'
-
-  get 'users/new'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root 'application#hello'

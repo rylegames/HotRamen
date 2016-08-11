@@ -50,7 +50,7 @@ Hope this was helpful!
 
   when /add/i
 
-    user = User.find_by(facebook_id: message.sender["id"])
+    #user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id) if event_id != 0
     
@@ -95,7 +95,7 @@ Hope this was helpful!
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)  if event_id != 0
-    user = User.find_by(facebook_id: message.sender["id"])
+    #user = User.find_by(facebook_id: message.sender["id"])
     if event
       puts "show event #{event.id}"
       event.full_display.each do |text|
@@ -186,7 +186,7 @@ Hope this was helpful!
     end
 
   when /my events/i
-    user = User.find_by(facebook_id: message.sender["id"])
+    #user = User.find_by(facebook_id: message.sender["id"])
     events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')
     if user and events.size > 0
       events.each do |event|

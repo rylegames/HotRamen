@@ -201,7 +201,7 @@ Hope this was helpful!
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "You're all set! Welcome aboard and have fun at orientation!"
+            text: "You're all set! You can 'delete' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
           }
         )
       end

@@ -50,7 +50,7 @@ Hope this was helpful!
 
   when /add/i
 
-    user = User.where(facebook_id: message.sender["id"]).pluck(:id)
+    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
     #attendance = user.attend!(user[0], event_id)
     attendance = Attendance.where(user_id: user_id, event_id: new_event_id).first_or_create
@@ -87,7 +87,7 @@ Hope this was helpful!
     attendance = 0
 
   when /delete/i
-    user = User.where(facebook_id: message.sender["id"]).pluck(:id)
+    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
     attendance = Attendance.where(user_id: user_id, event_id: new_event_id).first_or_create
 

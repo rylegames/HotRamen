@@ -219,7 +219,7 @@ Hope this was helpful!
     Bot.deliver(
       recipient: message.sender,
       message:{
-        "text": "",     
+        "text": "asdf",     
         "quick_replies":[
           {
             "content_type":"text",

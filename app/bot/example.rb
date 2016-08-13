@@ -50,13 +50,11 @@ Hope this was helpful!
 
   when /add/i
 
-    user = User.find_by(facebook_id: message.sender["id"])
+    user = User.where(facebook_id: message.sender["id"]).pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find(event_id) if event_id != 0
-    
-    if event
-      attendance = user.attend!(event_id)
-      attendance.save
+    attendance = user.attend!(user[0], event_id)
+
+    if user[0] and attendance.id and event_id != 0
 
       Bot.deliver(
         recipient: message.sender,
@@ -82,16 +80,34 @@ Hope this was helpful!
         }
       )
     end
+
+    user = 0
+    event_id = 0
+    attendance = 0
+
   when /delete/i
-    user = User.find_by(facebook_id: message.sender["id"])
+    user = User.where(facebook_id: message.sender["id"]).pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
-    user.unattend(event_id) if event_id != 0
-    Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'Event has been deleted!'
-        }
-      )
+
+    if user.unattend(user[0], event_id) and user[0] and event_id != 0
+      Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: 'Event has been deleted!'
+          }
+        )
+    else 
+      Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Event couldn't be found... Eh, who cares, not in your schedule!"
+          }
+        )
+    end
+
+    user = 0
+    event_id = 0
+
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)  if event_id != 0

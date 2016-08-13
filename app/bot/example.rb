@@ -55,7 +55,7 @@ Hope this was helpful!
     attendance = user.attend(user.id, event_id)
     #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
 
-    if user[0] and attendance.id and event_id != 0
+    if user and attendance.id and event_id != 0
 
       Bot.deliver(
         recipient: message.sender,

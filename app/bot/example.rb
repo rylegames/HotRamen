@@ -224,27 +224,27 @@ Hope this was helpful!
           {
             "content_type":"text",
             "title":"#{1}",
-            "payload":"SHOW_" + 1.to_s
+            "payload":"SHOW_#{1}" 
           },
           {
             "content_type":"text",
             "title":"#{2}",
-            "payload":"SHOW_" + 2.to_s
+            "payload":"SHOW_#{2}" 
           },
           {
             "content_type":"text",
             "title":"#{3}",
-            "payload":"SHOW_" + 3.to_s
+            "payload":"SHOW_#{3}"
           } ,
           {
             "content_type":"text",
             "title":"#{4}",
-            "payload":"SHOW_" + 4.to_s
+            "payload":"SHOW_#{4}" 
           },
           {
             "content_type":"text",
             "title":"#{5}",
-            "payload":"SHOW_" + 5.to_s
+            "payload":"SHOW_#{5}" 
           }                
         ]
       }
@@ -369,27 +369,27 @@ Bot.on :postback do |postback|
           {
             "content_type":"text",
             "title":"#{event_id + 1}",
-            "payload":"SHOW_" + (event_id + 1).to_s
+            "payload":"SHOW_#{event_id + 1}" 
           },
           {
             "content_type":"text",
             "title":"#{event_id + 2}",
-            "payload":"SHOW_" + (event_id + 2).to_s
+            "payload":"SHOW_#{event_id + 2}" 
           },
           {
             "content_type":"text",
             "title":"#{event_id + 3}",
-            "payload":"SHOW_" + (event_id + 3).to_s
+            "payload":"SHOW_#{event_id + 3}"
           } ,
           {
             "content_type":"text",
             "title":"#{event_id + 4}",
-            "payload":"SHOW_" + (event_id + 4).to_s
+            "payload":"SHOW_#{event_id + 4}" 
           },
           {
             "content_type":"text",
             "title":"#{event_id + 5}",
-            "payload":"SHOW_" + (event_id + 5).to_s
+            "payload":"SHOW_#{event_id + 5}" 
           }                
         ]
       }

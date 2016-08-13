@@ -223,7 +223,7 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"#{1}",
+            "title":"Add #{1}",
             "payload":"SHOW_#{1}" 
           },
           {

@@ -170,7 +170,7 @@ Hope this was helpful!
         Bot.deliver(
           recipient: message.sender,
           message: {
-            text: "Pretty cool huh? Text 'add' and the event ID number to add it to your schedule!"
+            text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
           }
         )
       end

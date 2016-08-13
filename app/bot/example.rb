@@ -50,12 +50,13 @@ Hope this was helpful!
 
   when /add/i
 
-    user = User.where(facebook_id: message.sender["id"])#.pluck(:id)
+    #user = User.where(facebook_id: message.sender["id"]).pluck(:id)
+    user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
     attendance = user.attend(user.id, event_id)
     #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
 
-    if user and event_id != 0
+    if user and attendance.id and event_id != 0
 
       Bot.deliver(
         recipient: message.sender,

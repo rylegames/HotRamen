@@ -138,7 +138,7 @@ Hope this was helpful!
               "buttons":[
                 {
                   "type":"postback",
-                  "title":"Add Event To Schedule",
+                  "title":"Add To Schedule",
                   "payload":"ADD_" + event_id.to_s
                 }              
               ]
@@ -361,7 +361,7 @@ Bot.on :postback do |postback|
   when /ADD/i
 
     #user = User.where(facebook_id: message.sender["id"]).pluck(:id)
-    user = User.find_by(facebook_id: message.sender["id"])
+    user = User.find_by(facebook_id: postback.sender["id"])
     event_id = postback.payload.split("_")[-1].to_i
     attendance = user.attend(user.id, event_id)
     #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
@@ -369,7 +369,7 @@ Bot.on :postback do |postback|
     if user and attendance.id and event_id != 0
 
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
           text: 'Event has been added!'
         }
@@ -377,7 +377,7 @@ Bot.on :postback do |postback|
 
       if user.events.size == 1
         Bot.deliver(
-          recipient: message.sender,
+          recipient: postback.sender,
           message: {
             text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
           }
@@ -386,7 +386,7 @@ Bot.on :postback do |postback|
 
     else
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
           text: "Couldn't find that event. Double check the event number"
         }
@@ -399,7 +399,7 @@ Bot.on :postback do |postback|
 
   else
     Bot.deliver(
-      recipient: message.sender,
+      recipient: postback.sender,
       message: {
         text: "Couldn't find that event. Double check the event number"
       }

@@ -166,14 +166,14 @@ Hope this was helpful!
         }
       )
 
-      if user.events.size == 0
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
-          }
-        )
-      end
+      # if user.events.size == 0
+      #   Bot.deliver(
+      #     recipient: message.sender,
+      #     message: {
+      #       text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
+      #     }
+      #   )
+      # end
 
     else
       Bot.deliver(
@@ -186,7 +186,7 @@ Hope this was helpful!
 
   when /all events/i
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(0)
-    user = User.find_by(facebook_id: message.sender["id"])
+    #user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -250,14 +250,14 @@ Hope this was helpful!
     #   }
     # )
 
-    if user.events.size == 0
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
-        }
-      )
-    end
+    # if user.events.size == 0
+    #   Bot.deliver(
+    #     recipient: message.sender,
+    #     message: {
+    #       text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+    #     }
+    #   )
+    # end
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

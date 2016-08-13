@@ -368,27 +368,27 @@ Bot.on :postback do |postback|
         "quick_replies":[
           {
             "content_type":"text",
-            "title":" " + (event_id + 1).to_s,
+            "title":"#{event_id + 1}",
             "payload":"SHOW_" + (event_id + 1).to_s
           },
           {
             "content_type":"text",
-            "title":" " + (event_id + 2).to_s,
+            "title":"#{event_id + 2}",
             "payload":"SHOW_" + (event_id + 2).to_s
           },
           {
             "content_type":"text",
-            "title":" " + (event_id + 3).to_s,
+            "title":"#{event_id + 3}",
             "payload":"SHOW_" + (event_id + 3).to_s
           } ,
           {
             "content_type":"text",
-            "title":" " + (event_id + 4).to_s,
+            "title":"#{event_id + 4}",
             "payload":"SHOW_" + (event_id + 4).to_s
           },
           {
             "content_type":"text",
-            "title":" " + (event_id + 5).to_s,
+            "title":"#{event_id + 5}",
             "payload":"SHOW_" + (event_id + 5).to_s
           }                
         ]

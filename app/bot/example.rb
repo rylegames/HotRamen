@@ -223,27 +223,27 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":" " + 1.to_s,
+            "title":"#{1}",
             "payload":"SHOW_" + 1.to_s
           },
           {
             "content_type":"text",
-            "title":" " + 2.to_s,
+            "title":"#{2}",
             "payload":"SHOW_" + 2.to_s
           },
           {
             "content_type":"text",
-            "title":" " + 3.to_s,
+            "title":"#{3}",
             "payload":"SHOW_" + 3.to_s
           } ,
           {
             "content_type":"text",
-            "title":" " + 4.to_s,
+            "title":"#{4}",
             "payload":"SHOW_" + 4.to_s
           },
           {
             "content_type":"text",
-            "title":" " + 5.to_s,
+            "title":"#{5}",
             "payload":"SHOW_" + 5.to_s
           }                
         ]

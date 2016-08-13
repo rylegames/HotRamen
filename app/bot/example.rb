@@ -219,31 +219,31 @@ Hope this was helpful!
     Bot.deliver(
       recipient: message.sender,
       message:{
-        "text": "asdf",     
+        "text": "",     
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Show " + 1.to_s,
+            "title":"" + 1.to_s,
             "payload":"SHOW_" + 1.to_s
           },
           {
             "content_type":"text",
-            "title":"Show " + 2.to_s,
+            "title":"" + 2.to_s,
             "payload":"SHOW_" + 2.to_s
           },
           {
             "content_type":"text",
-            "title":"Show " + 3.to_s,
+            "title":"" + 3.to_s,
             "payload":"SHOW_" + 3.to_s
           } ,
           {
             "content_type":"text",
-            "title":"Show " + 4.to_s,
+            "title":"" + 4.to_s,
             "payload":"SHOW_" + 4.to_s
           },
           {
             "content_type":"text",
-            "title":"Show " + 5.to_s,
+            "title":"" + 5.to_s,
             "payload":"SHOW_" + 5.to_s
           }                
         ]

@@ -117,7 +117,8 @@ Hope this was helpful!
     user = User.find_by(facebook_id: message.sender["id"])
     if event
       puts "show event #{event.id}"
-      event.full_display.each do |text|
+      parts = event.full_display
+      parts[0..-2].each do |text|
         Bot.deliver(
           recipient: message.sender,
           message: {
@@ -125,6 +126,26 @@ Hope this was helpful!
           }
         )
       end
+
+      Bot.deliver(
+        recipient: message.sender,
+        message:{
+          "attachment":{
+            "type":"template",
+            "payload":{
+              "template_type":"button",
+              "text": parts[-1],     
+              "buttons":[
+                {
+                  "type":"postback",
+                  "title":"Add Event To Schedule",
+                  "payload":"ADD_" + event_id.to_s
+                }              
+              ]
+            }
+          }
+        }
+      )
 
       Bot.deliver(
         recipient: message.sender,
@@ -338,6 +359,45 @@ Bot.on :postback do |postback|
       }
     }
   )
+
+  when /ADD/i
+
+    #user = User.where(facebook_id: message.sender["id"]).pluck(:id)
+    user = User.find_by(facebook_id: message.sender["id"])
+    event_id = postback.payload.split("_")[-1].to_i
+    attendance = user.attend(user.id, event_id)
+    #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
+
+    if user and attendance.id and event_id != 0
+
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: 'Event has been added!'
+        }
+      )
+
+      if user.events.size == 1
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
+          }
+        )
+      end
+
+    else
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "Couldn't find that event. Double check the event number"
+        }
+      )
+    end
+
+    user = 0
+    event_id = 0
+    attendance = 0
 
 end
 

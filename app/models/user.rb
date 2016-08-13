@@ -6,7 +6,7 @@ class User < ApplicationRecord
 	has_many :events, through: :attendances
 	validates :facebook_id, presence: true
 
-	def attend!(user_id, new_event_id)
+	def attend(user_id, new_event_id)
 		Attendance.where(user_id: user_id, event_id: new_event_id).first_or_create
 	end
 

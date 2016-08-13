@@ -87,11 +87,11 @@ Hope this was helpful!
     attendance = 0
 
   when /delete/i
-    user_id = User.where(facebook_id: message.sender["id"])#.pluck(:id)
+    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
     #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
 
-    if user.unattend(user.id, event_id)
+    if Attendance.where(user_id: user_id[0], event_id: new_event_id).delete_all
       Bot.deliver(
           recipient: message.sender,
           message: {

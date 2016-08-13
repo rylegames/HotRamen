@@ -223,27 +223,27 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"MORE_ALL_EVENTS #{1}",
+            "title":"Show #{1}",
             "payload":"SHOW_#{1}" 
           },
           {
             "content_type":"text",
-            "title":"#{2}",
+            "title":"Show #{2}",
             "payload":"SHOW_#{2}" 
           },
           {
             "content_type":"text",
-            "title":"#{3}",
+            "title":"Show #{3}",
             "payload":"SHOW_#{3}"
           } ,
           {
             "content_type":"text",
-            "title":"#{4}",
+            "title":"Show #{4}",
             "payload":"SHOW_#{4}" 
           },
           {
             "content_type":"text",
-            "title":"#{5}",
+            "title":"Show #{5}",
             "payload":"SHOW_#{5}" 
           }                
         ]
@@ -368,27 +368,27 @@ Bot.on :postback do |postback|
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"#{event_id + 1}",
+            "title":"Show #{event_id + 1}",
             "payload":"SHOW_#{event_id + 1}" 
           },
           {
             "content_type":"text",
-            "title":"#{event_id + 2}",
+            "title":"Show #{event_id + 2}",
             "payload":"SHOW_#{event_id + 2}" 
           },
           {
             "content_type":"text",
-            "title":"#{event_id + 3}",
+            "title":"Show #{event_id + 3}",
             "payload":"SHOW_#{event_id + 3}"
           } ,
           {
             "content_type":"text",
-            "title":"#{event_id + 4}",
+            "title":"Show #{event_id + 4}",
             "payload":"SHOW_#{event_id + 4}" 
           },
           {
             "content_type":"text",
-            "title":"#{event_id + 5}",
+            "title":"Show #{event_id + 5}",
             "payload":"SHOW_#{event_id + 5}" 
           }                
         ]

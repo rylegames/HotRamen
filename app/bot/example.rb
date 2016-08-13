@@ -339,26 +339,24 @@ Bot.on :postback do |postback|
       )
     end
 
-  end
-
-  Bot.deliver(
-    recipient: message.sender,
-    message: {
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "generic",
-          "elements": {
-            "element": {
-              "title": event.location,
-              "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-              "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": {
+              "element": {
+                "title": event.location,
+                "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+              }
             }
           }
         }
       }
-    }
-  )
+    )
 
   when /ADD/i
 
@@ -398,6 +396,15 @@ Bot.on :postback do |postback|
     user = 0
     event_id = 0
     attendance = 0
+
+  else
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: "Couldn't find that event. Double check the event number"
+      }
+    )
+  end
 
 end
 

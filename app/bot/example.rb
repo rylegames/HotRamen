@@ -216,39 +216,39 @@ Hope this was helpful!
       }
     )
 
-    Bot.deliver(
-      recipient: message.sender,
-      message:{
-        "text": "Show Full Description",     
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"Show " + 1.to_s,
-            "payload":"SHOW_" + 1.to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + 2.to_s,
-            "payload":"SHOW_" + 2.to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + 3.to_s,
-            "payload":"SHOW_" + 3.to_s
-          } ,
-          {
-            "content_type":"text",
-            "title":"Show " + 4.to_s,
-            "payload":"SHOW_" + 4.to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + 5.to_s,
-            "payload":"SHOW_" + 5.to_s
-          }                
-        ]
-      }
-    )
+    # Bot.deliver(
+    #   recipient: message.sender,
+    #   message:{
+    #     "text": "Show Full Description",     
+    #     "quick_replies":[
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + 1.to_s,
+    #         "payload":"SHOW_" + 1.to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + 2.to_s,
+    #         "payload":"SHOW_" + 2.to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + 3.to_s,
+    #         "payload":"SHOW_" + 3.to_s
+    #       } ,
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + 4.to_s,
+    #         "payload":"SHOW_" + 4.to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + 5.to_s,
+    #         "payload":"SHOW_" + 5.to_s
+    #       }                
+    #     ]
+    #   }
+    # )
 
     if user.events.size == 0
       Bot.deliver(
@@ -361,39 +361,39 @@ Bot.on :postback do |postback|
       }
     )
 
-    Bot.deliver(
-      recipient: postback.sender,
-      message:{
-        "text": "Show Full Description Of",     
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"Show " + (event_id + 1).to_s,
-            "payload":"SHOW_" + (event_id + 1).to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + (event_id + 2).to_s,
-            "payload":"SHOW_" + (event_id + 2).to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + (event_id + 3).to_s,
-            "payload":"SHOW_" + (event_id + 3).to_s
-          } ,
-          {
-            "content_type":"text",
-            "title":"Show " + (event_id + 4).to_s,
-            "payload":"SHOW_" + (event_id + 4).to_s
-          },
-          {
-            "content_type":"text",
-            "title":"Show " + (event_id + 5).to_s,
-            "payload":"SHOW_" + (event_id + 5).to_s
-          }                
-        ]
-      }
-    )
+    # Bot.deliver(
+    #   recipient: postback.sender,
+    #   message:{
+    #     "text": "Show Full Description Of",     
+    #     "quick_replies":[
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + (event_id + 1).to_s,
+    #         "payload":"SHOW_" + (event_id + 1).to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + (event_id + 2).to_s,
+    #         "payload":"SHOW_" + (event_id + 2).to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + (event_id + 3).to_s,
+    #         "payload":"SHOW_" + (event_id + 3).to_s
+    #       } ,
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + (event_id + 4).to_s,
+    #         "payload":"SHOW_" + (event_id + 4).to_s
+    #       },
+    #       {
+    #         "content_type":"text",
+    #         "title":"Show " + (event_id + 5).to_s,
+    #         "payload":"SHOW_" + (event_id + 5).to_s
+    #       }                
+    #     ]
+    #   }
+    # )
 
   when /SHOW/i
     event_id = postback.payload.split("_")[-1].to_i

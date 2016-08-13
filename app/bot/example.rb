@@ -223,27 +223,27 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title": 1.to_s,
+            "title":"Show " + 1.to_s,
             "payload":"SHOW_" + 1.to_s
           },
           {
             "content_type":"text",
-            "title":2.to_s,
+            "title":"Show " + 2.to_s,
             "payload":"SHOW_" + 2.to_s
           },
           {
             "content_type":"text",
-            "title": 3.to_s,
+            "title":"Show " + 3.to_s,
             "payload":"SHOW_" + 3.to_s
           } ,
           {
             "content_type":"text",
-            "title": 4.to_s,
+            "title":"Show " + 4.to_s,
             "payload":"SHOW_" + 4.to_s
           },
           {
             "content_type":"text",
-            "title": 5.to_s,
+            "title":"Show " + 5.to_s,
             "payload":"SHOW_" + 5.to_s
           }                
         ]
@@ -368,27 +368,27 @@ Bot.on :postback do |postback|
         "quick_replies":[
           {
             "content_type":"text",
-            "title": (event_id + 1).to_s,
+            "title":"Show " + (event_id + 1).to_s,
             "payload":"SHOW_" + (event_id + 1).to_s
           },
           {
             "content_type":"text",
-            "title": (event_id + 2).to_s,
+            "title":"Show " + (event_id + 2).to_s,
             "payload":"SHOW_" + (event_id + 2).to_s
           },
           {
             "content_type":"text",
-            "title": (event_id + 3).to_s,
+            "title":"Show " + (event_id + 3).to_s,
             "payload":"SHOW_" + (event_id + 3).to_s
           } ,
           {
             "content_type":"text",
-            "title":(event_id + 4).to_s,
+            "title":"Show " + (event_id + 4).to_s,
             "payload":"SHOW_" + (event_id + 4).to_s
           },
           {
             "content_type":"text",
-            "title": (event_id + 5).to_s,
+            "title":"Show " + (event_id + 5).to_s,
             "payload":"SHOW_" + (event_id + 5).to_s
           }                
         ]

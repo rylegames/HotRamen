@@ -126,3 +126,79 @@ def add_event(sender, event_id)
   attendance = 0
 
 end
+
+def show_event(sender, event_id)
+  event = Event.find(event_id)  if event_id != 0
+  newuser = User.where(facebook_id: sender["id"]).pluck(:newuser)[0]
+
+  if event
+    puts "show event #{event.id}"
+    parts = event.full_display
+    parts[0..-2].each do |text|
+      Bot.deliver(
+        recipient: sender,
+        message: {
+          text: text
+        }
+      )
+    end
+
+    Bot.deliver(
+      recipient: sender,
+      message:{
+        "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"button",
+            "text": parts[-1],     
+            "buttons":[
+              {
+                "type":"postback",
+                "title":"Add To Schedule",
+                "payload":"ADD_" + event_id.to_s
+              }              
+            ]
+          }
+        }
+      }
+    )
+
+    Bot.deliver(
+      recipient: sender,
+      message: {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": {
+              "element": {
+                "title": event.location,
+                "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
+                "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
+              }
+            }
+          }
+        }
+      }
+    )
+
+    if newuser
+      Bot.deliver(
+        recipient: sender,
+        message: {
+          text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
+        }
+      )
+      #User.where(facebook_id: message.sender["id"]).update(newuser: 3)
+    end
+
+  else
+    Bot.deliver(
+      recipient: sender,
+      message: {
+        text: "Couldn't find that event. Double check the event number"
+      }
+    )
+  end
+
+end

@@ -50,47 +50,9 @@ Hope this was helpful!
     )
 
   when /add/i
-    user = User.where(facebook_id: message.sender["id"]).pluck(:id, :newuser)[0]
-    newuser = user[1]
-    user_id = user[0]
     event_id = message.text.split(" ")[-1].to_i
-    attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
-
-    if attendance.id and event_id != 0
-
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: 'Event has been added!'
-        }
-      )
-
-      if newuser
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
-          }
-        )
-
-        #User.where(facebook_id: message.sender["id"]).update(newuser: 4)
-      end
-
-    else
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: "Couldn't find that event. Double check the event number"
-        }
-      )
-    end
-
-    user = 0
-    newuser = 0
-    user_id = 0
-    event_id = 0
-    attendance = 0
-
+    add_event(message.sender, event_id)
+ 
   when /delete/i
     user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
     event_id = message.text.split(" ")[-1].to_i
@@ -116,78 +78,7 @@ Hope this was helpful!
 
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
-    event = Event.find(event_id)  if event_id != 0
-    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
-
-    if event
-      puts "show event #{event.id}"
-      parts = event.full_display
-      parts[0..-2].each do |text|
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: text
-          }
-        )
-      end
-
-      Bot.deliver(
-        recipient: message.sender,
-        message:{
-          "attachment":{
-            "type":"template",
-            "payload":{
-              "template_type":"button",
-              "text": parts[-1],     
-              "buttons":[
-                {
-                  "type":"postback",
-                  "title":"Add To Schedule",
-                  "payload":"ADD_" + event_id.to_s
-                }              
-              ]
-            }
-          }
-        }
-      )
-
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          "attachment": {
-            "type": "template",
-            "payload": {
-              "template_type": "generic",
-              "elements": {
-                "element": {
-                  "title": event.location,
-                  "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                  "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
-                }
-              }
-            }
-          }
-        }
-      )
-
-      if newuser
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
-          }
-        )
-        #User.where(facebook_id: message.sender["id"]).update(newuser: 3)
-      end
-
-    else
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: "Couldn't find that event. Double check the event number"
-        }
-      )
-    end
+    show_event(message.sender, event_id)    
 
   when /all events/i
     all_events(message.sender, 0)
@@ -266,7 +157,6 @@ For each event, you can 'add', 'delete', and 'show'. For example, here's what yo
 
 Hope this was helpful!
           "
-
     Bot.deliver(
       recipient: postback.sender,
       message: {
@@ -279,7 +169,6 @@ Hope this was helpful!
 
 
   when /ADD/i
-
     event_id = postback.payload.split("_")[-1].to_i
     add_event(postback.sender, event_id)
     

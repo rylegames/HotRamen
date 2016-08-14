@@ -183,6 +183,7 @@ Hope this was helpful!
     end
 
   when /all events/i
+    puts message
     if message["quick_reply"]
       event_id = message["quick_reply"].payload.to_i
     else

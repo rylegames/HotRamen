@@ -439,7 +439,7 @@ Hope this was helpful!
     if attendance.id and event_id != 0
 
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
           text: 'Event has been added!'
         }
@@ -447,7 +447,7 @@ Hope this was helpful!
 
       if newuser
         Bot.deliver(
-          recipient: message.sender,
+          recipient: postback.sender,
           message: {
             text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
           }
@@ -456,7 +456,7 @@ Hope this was helpful!
 
     else
       Bot.deliver(
-        recipient: message.sender,
+        recipient: postback.sender,
         message: {
           text: "Couldn't find that event. Double check the event number"
         }

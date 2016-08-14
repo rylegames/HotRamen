@@ -49,9 +49,10 @@ Hope this was helpful!
     )
 
   when /add/i
-    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
+    user = User.where(facebook_id: message.sender["id"]).pluck(:id, :newuser)[0]
+    newuser = user[1]
+    user_id = user[0]
     event_id = message.text.split(" ")[-1].to_i
-    puts user_id, event_id
     attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
 
     if attendance.id and event_id != 0
@@ -63,14 +64,16 @@ Hope this was helpful!
         }
       )
 
-      # if newuser == 1
-      #   Bot.deliver(
-      #     recipient: message.sender,
-      #     message: {
-      #       text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
-      #     }
-      #   )
-      # end
+      if newuser
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
+          }
+        )
+
+        #User.where(facebook_id: message.sender["id"]).update(newuser: 4)
+      end
 
     else
       Bot.deliver(
@@ -82,6 +85,8 @@ Hope this was helpful!
     end
 
     user = 0
+    newuser = 0
+    user_id = 0
     event_id = 0
     attendance = 0
 
@@ -171,6 +176,7 @@ Hope this was helpful!
             text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
           }
         )
+        #User.where(facebook_id: message.sender["id"]).update(newuser: 3)
       end
 
     else
@@ -189,7 +195,6 @@ Hope this was helpful!
     else
       event_id = message.text.split(" ")[-1].to_i
     end
-    puts "asdf", event_id
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
@@ -229,7 +234,7 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"More Events",
+            "title":"All Events",
             "payload":"#{event_id + 5}" 
           },
           {
@@ -268,6 +273,8 @@ Hope this was helpful!
           text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
         }
       )
+
+      #User.where(facebook_id: message.sender["id"]).update(newuser: 2)
     end
 
   when /my events/i
@@ -289,6 +296,7 @@ Hope this was helpful!
             text: "You're all set! You can 'delete' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
           }
         )
+        User.where(facebook_id: message.sender["id"]).update(newuser: false)
       end
     else
       Bot.deliver(
@@ -298,21 +306,6 @@ Hope this was helpful!
           }
         )
     end
-
-  # when /search/i
-  #   user = User.find_by(facebook_id: message.sender["id"])
-  #   term = message.text.slice! "search "
-  #   events = user.events.where('title ~= ?', term)
-  #   if user and events.size > 0
-  #     events.each do |event|
-  #       Bot.deliver(
-  #         recipient: message.sender,
-  #         message: {
-  #           text: event.mini_display
-  #         }
-  #       )
-  #     end
-  #   end
 
   else
     Bot.deliver(
@@ -427,57 +420,27 @@ Hope this was helpful!
       }
     )
 
-  when /SHOW/i
-    event_id = postback.payload.split("_")[-1].to_i
-    event = Event.find(event_id)
-    event.full_display.each do |text|
-      Bot.deliver(
-        recipient: postback.sender,
-        message: {
-          text: text
-        }
-      )
-    end
-
-    Bot.deliver(
-      recipient: message.sender,
-      message: {
-        "attachment": {
-          "type": "template",
-          "payload": {
-            "template_type": "generic",
-            "elements": {
-              "element": {
-                "title": event.location,
-                "image_url": "https://maps.googleapis.com/maps/api/staticmap?size=764x400&center="+event.latitude.to_s+","+event.longitude.to_s+"&zoom=17&markers="+event.latitude.to_s+","+event.longitude.to_s,
-                "item_url": "http://maps.apple.com/maps?q="+event.latitude.to_s+","+event.longitude.to_s+"&z=16"
-              }
-            }
-          }
-        }
-      }
-    )
 
   when /ADD/i
 
-    #user = User.where(facebook_id: message.sender["id"]).pluck(:id)
-    user = User.find_by(facebook_id: postback.sender["id"])
-    event_id = postback.payload.split("_")[-1].to_i
-    attendance = user.attend(user.id, event_id)
-    #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
+    user = User.where(facebook_id: postback.sender["id"]).pluck(:id, :newuser)[0]
+    newuser = user[1]
+    user_id = user[0]
+    event_id = postback.payload.split(" ")[-1].to_i
+    attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
 
-    if user and attendance.id and event_id != 0
+    if attendance.id and event_id != 0
 
       Bot.deliver(
-        recipient: postback.sender,
+        recipient: message.sender,
         message: {
           text: 'Event has been added!'
         }
       )
 
-      if user.events.size == 1
+      if newuser
         Bot.deliver(
-          recipient: postback.sender,
+          recipient: message.sender,
           message: {
             text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
           }
@@ -486,7 +449,7 @@ Hope this was helpful!
 
     else
       Bot.deliver(
-        recipient: postback.sender,
+        recipient: message.sender,
         message: {
           text: "Couldn't find that event. Double check the event number"
         }
@@ -494,6 +457,8 @@ Hope this was helpful!
     end
 
     user = 0
+    newuser = 0
+    user_id = 0
     event_id = 0
     attendance = 0
 

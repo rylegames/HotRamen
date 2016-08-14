@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create!(facebook_id: 100000650169659)
+User.create!(facebook_id: 100000650169659, newuser: 1)
 
 Event.create!(	title: "Mail And Package Pick-up",
 				description: "You may pick up your boxes and packages from the Harvard Yard Mail Center. A photo ID is required to claim packages.",

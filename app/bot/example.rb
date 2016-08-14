@@ -30,11 +30,11 @@ Bot.on :message do |message|
       }
     )
   when /help/i
-    text = "Hello! I'm here to tell you everything going on. 
+    text = "Hello! I'm here to tell you everything going on.\n 
 • all events 
 • my events
 
-For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.
+For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.\n
 • add 7
 • delete 7
 • show 7
@@ -113,7 +113,7 @@ Bot.on :postback do |postback|
       user = User.create(facebook_id: postback.sender["id"], newuser: true) 
     end
 
-    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n Text 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
+    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n\nText 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
       message: {
@@ -123,11 +123,11 @@ Bot.on :postback do |postback|
     user = 0
 
   when "HELP"
-    text = "Hello! I'm here to tell you everything going on. 
+    text = "Hello! I'm here to tell you everything going on. \n 
 • all events 
 • my events
 
-For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.
+For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.\n 
 • add 7
 • delete 7
 • show 7

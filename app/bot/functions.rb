@@ -137,7 +137,7 @@ def add_event(sender, event_id)
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "You've added your first event! Note: you can ADD, DELETE, or SHOW an event whenever you want, as long as you include the event ID. \n\nText 'my events' to see your entire schedule!"
+          text: "You've added your first event! Note: you can ADD, DELETE, or SHOW an event whenever you want, as long as you include the event ID. \n\nText 'my events' or click My Events in the menu to see your entire schedule!"
         }
       )
     end

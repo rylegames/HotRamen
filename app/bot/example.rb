@@ -189,12 +189,11 @@ Hope this was helpful!
     end
 
   when /all events/i
-    puts message
-    if message["quick_reply"]
-      event_id = message["quick_reply"].payload.to_i
-    else
-      event_id = message.text.split(" ")[-1].to_i
-    end
+    # if message["quick_reply"]
+    #   event_id = message["quick_reply"].payload.to_i
+    # else
+    #   event_id = message.text.split(" ")[-1].to_i
+    # end
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
@@ -232,11 +231,11 @@ Hope this was helpful!
       message:{
         "text": events[-1],     
         "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"All Events",
-            "payload":"#{event_id + 5}" 
-          },
+          # {
+          #   "content_type":"text",
+          #   "title":"All Events",
+          #   "payload":"#{event_id + 5}" 
+          # },
           {
             "content_type":"text",
             "title":"Show #{event_id + 1}",
@@ -320,7 +319,12 @@ end
 Bot.on :postback do |postback|
   case postback.payload
   when 'WELCOME_NEW_USER'
-    user = User.create(facebook_id: postback.sender["id"], newuser: true) unless User.find_by(facebook_id: postback.sender["id"])
+    if User.find_by(facebook_id: postback.sender["id"]) 
+      user = User.where(facebook_id: postback.sender["id"]).update(newuser: true)
+    else
+      user = User.create(facebook_id: postback.sender["id"], newuser: true) 
+    end
+
     text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
@@ -328,6 +332,7 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
+    user = 0
 
   when "HELP"
     text = "Hello! I'm here to tell you everything going on. 

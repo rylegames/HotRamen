@@ -195,7 +195,7 @@ Hope this was helpful!
     #   event_id = message.text.split(" ")[-1].to_i
     # end
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
-    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+    #newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
     events[0..-2].each do |event|
       Bot.deliver(
@@ -265,13 +265,13 @@ Hope this was helpful!
       }
     )
 
-    if newuser
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
-        }
-      )
+    # if newuser
+    #   Bot.deliver(
+    #     recipient: message.sender,
+    #     message: {
+    #       text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+    #     }
+    #   )
 
       #User.where(facebook_id: message.sender["id"]).update(newuser: 2)
     end

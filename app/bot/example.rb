@@ -87,6 +87,10 @@ Hope this was helpful!
     event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
     all_events(message.sender, event_id)
 
+  when /^(\d*)$/
+    event_id = message.text.to_i
+    show_event(message.sender, event_id)  
+
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])
     events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')

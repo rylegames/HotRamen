@@ -433,7 +433,7 @@ Hope this was helpful!
     user = User.where(facebook_id: postback.sender["id"]).pluck(:id, :newuser)[0]
     newuser = user[1]
     user_id = user[0]
-    event_id = postback.payload.split(" ")[-1].to_i
+    event_id = postback.payload.split("_")[-1].to_i
     attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
 
     if attendance.id and event_id != 0

@@ -194,7 +194,7 @@ Hope this was helpful!
     # else
     #   event_id = message.text.split(" ")[-1].to_i
     # end
-    puts message.payload
+    puts message
     event_id = 0
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]

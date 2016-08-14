@@ -218,7 +218,7 @@ def show_event(sender, event_id)
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
+          text: "Pretty cool huh? Text 'add' and the event ID number or press 'Add to Schedule'"
         }
       )
       #User.where(facebook_id: message.sender["id"]).update(newuser: 3)

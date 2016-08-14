@@ -89,7 +89,7 @@ Hope this was helpful!
       all_events(message.sender, event_id)
     rescue
       Bot.deliver(
-        recipient: postback.sender,
+        recipient: message.sender,
         message: {
           text: "Try texting 'all events'"
         }

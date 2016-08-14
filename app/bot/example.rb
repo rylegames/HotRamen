@@ -183,12 +183,13 @@ Hope this was helpful!
     end
 
   when /all events/i
+    puts message
     if message.quick_reply
       event_id = message.quick_reply.payload.to_i
     else
       event_id = message.text.split(" ")[-1].to_i
     end
-    puts event_id
+    puts "asdf", event_id
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 

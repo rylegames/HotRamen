@@ -113,7 +113,7 @@ Bot.on :postback do |postback|
       user = User.create(facebook_id: postback.sender["id"], newuser: true) 
     end
 
-    text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' or select the menu button at the botton left and click All Events to start building your schedule!"
+    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' or select the menu button at the botton left and click All Events to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
       message: {

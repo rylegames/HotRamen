@@ -160,7 +160,7 @@ def add_event(sender, event_id)
 end
 
 def show_event(sender, event_id)
-  event = Event.find(event_id)  if event_id != 0
+  event = Event.find(event_id)  if event_id != 0 and event_id < 167
   newuser = User.where(facebook_id: sender["id"]).pluck(:newuser)[0]
 
   if event

@@ -184,37 +184,48 @@ end
 
 def my_events(sender, event_id)
   user = User.find_by(facebook_id: sender["id"])
-  events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
-  quick_replies = Array.new
-  quick_replies.push({ "content_type":"text", "title":"More Events", "payload":"MY_#{event_id + 5}"}) if events.size == 5
-  if user and events.size > 0
-    events[0..-2].each do |event|
+  
+  if user 
+    if events.size > 0
+      events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
+      quick_replies = Array.new
+      quick_replies.push({ "content_type":"text", "title":"More Events", "payload":"MY_#{event_id + 5}"}) if events.size == 5
+      events[0..-2].each do |event|
+        Bot.deliver(
+          recipient: sender,
+          message: {
+            text: event.mini_display
+          }
+        )
+
+        quick_replies.push({ "content_type":"text", "title":"#{event.id}","payload":"SHOW_#{event.id}"})
+      end
+      quick_replies.push({ "content_type":"text", "title":"#{events[-1].id}","payload":"SHOW_#{events[-1].id}"})
+
       Bot.deliver(
         recipient: sender,
-        message: {
-          text: event.mini_display
+        message:{
+          "text": events[-1].mini_display,     
+          "quick_replies":quick_replies
         }
       )
 
-      quick_replies.push({ "content_type":"text", "title":"#{event.id}","payload":"SHOW_#{event.id}"})
-    end
-    quick_replies.push({ "content_type":"text", "title":"#{events[-1].id}","payload":"SHOW_#{events[-1].id}"})
-
-    Bot.deliver(
-      recipient: sender,
-      message:{
-        "text": events[-1].mini_display,     
-        "quick_replies":quick_replies
-      }
-    )
-    if user.newuser
+      if user.newuser
+        Bot.deliver(
+          recipient: sender,
+          message: {
+            text: "You're all set! You can 'DELETE' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
+          }
+        )
+        User.where(facebook_id: sender["id"]).update(newuser: false)
+      end
+    else
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "You're all set! You can 'DELETE' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
+          text: "Looks like you haven't added any events to your schedule.\nText 'all events' and see what's going on!"
         }
       )
-      User.where(facebook_id: sender["id"]).update(newuser: false)
     end
   else
     Bot.deliver(

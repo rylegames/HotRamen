@@ -41,7 +41,7 @@ def all_events(sender, event_id)
         {
           "content_type":"text",
           "title":"More Events",
-          "payload":"#{event_id + 5}" 
+          "payload":"ALL_#{event_id + 5}" 
         },
         {
           "content_type":"text",
@@ -81,7 +81,7 @@ def all_events(sender, event_id)
           {
             "content_type":"text",
             "title":"More Events",
-            "payload":"#{event_id + 5}" 
+            "payload":"ALL_#{event_id + 5}" 
           },
           {
             "content_type":"text",
@@ -233,13 +233,16 @@ def show_event(sender, event_id)
     )
   end
 
+  event = 0
+  newuser = 0
+
 end
 
-def my_events(sender)
+def my_events(sender, event_id)
   user = User.find_by(facebook_id: sender["id"])
-  events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')
+  events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
   if user and events.size > 0
-    events.each do |event|
+    events[0..-2].each do |event|
       Bot.deliver(
         recipient: sender,
         message: {
@@ -247,6 +250,44 @@ def my_events(sender)
         }
       )
     end
+    Bot.deliver(
+      recipient: sender,
+      message:{
+        "text": events[-1].mini_display,     
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"More Events",
+            "payload":"MY_#{event_id + 5}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 1}",
+            "payload":"SHOW_#{event_id + 1}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 2}",
+            "payload":"SHOW_#{event_id + 2}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 3}",
+            "payload":"SHOW_#{event_id + 3}"
+          } ,
+          {
+            "content_type":"text",
+            "title":"#{event_id + 4}",
+            "payload":"SHOW_#{event_id + 4}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 5}",
+            "payload":"SHOW_#{event_id + 5}" 
+          }                
+        ]
+      }
+    )
     if user.newuser
       Bot.deliver(
         recipient: sender,

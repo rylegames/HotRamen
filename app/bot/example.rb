@@ -85,7 +85,9 @@ Hope this was helpful!
 
   when /more events/i
     begin
-      event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
+      event =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].split("_")
+      event_id = event[-1].to_i
+      type_id = event[0]
     rescue
       Bot.deliver(
         recipient: message.sender,
@@ -94,8 +96,15 @@ Hope this was helpful!
         }
       ) 
     end
-    all_events(message.sender, event_id) if event_id
-    
+
+    if event
+      if type_id == "ALL"
+        all_events(message.sender, event_id) 
+      else
+        my_events(message.sender, event_id) 
+      end
+    end
+
   when /^(\d*)$/
     event_id = message.text.to_i
     show_event(message.sender, event_id)  
@@ -159,7 +168,7 @@ Hope this was helpful!
     add_event(postback.sender, event_id)
 
   when /MY_EVENTS/i
-    my_events(postback.sender)
+    my_events(postback.sender, 0)
     
   else
     Bot.deliver(

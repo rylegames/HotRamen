@@ -202,3 +202,35 @@ def show_event(sender, event_id)
   end
 
 end
+
+def my_events(sender)
+  user = User.find_by(facebook_id: sender["id"])
+  events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc')
+  if user and events.size > 0
+    events.each do |event|
+      Bot.deliver(
+        recipient: sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
+    if events.size == 1
+      Bot.deliver(
+        recipient: sender,
+        message: {
+          text: "You're all set! You can 'delete' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
+        }
+      )
+      User.where(facebook_id: sender["id"]).update(newuser: false)
+    end
+  else
+    Bot.deliver(
+        recipient: sender,
+        message: {
+          text: "Looks like you haven't added any events to your schedule.\nText 'all events' and see what's going on!"
+        }
+      )
+  end
+
+end

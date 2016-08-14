@@ -110,7 +110,7 @@ Hope this was helpful!
     show_event(message.sender, event_id)  
 
   when /my events/i
-    my_events(message.sender)
+    my_events(message.sender, 0)
 
   else
     Bot.deliver(

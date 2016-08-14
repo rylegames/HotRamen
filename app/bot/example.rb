@@ -49,11 +49,11 @@ Hope this was helpful!
     )
 
   when /add/i
-    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
     event_id = message.text.split(" ")[-1].to_i
-    attendance = user.attend(user.id, event_id)
+    attendance = user.attend(user_id, event_id)
 
-    if newuser and attendance.id and event_id != 0
+    if attendance.id and event_id != 0
 
       Bot.deliver(
         recipient: message.sender,
@@ -62,14 +62,14 @@ Hope this was helpful!
         }
       )
 
-      if newuser == 1
-        Bot.deliver(
-          recipient: message.sender,
-          message: {
-            text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
-          }
-        )
-      end
+      # if newuser == 1
+      #   Bot.deliver(
+      #     recipient: message.sender,
+      #     message: {
+      #       text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
+      #     }
+      #   )
+      # end
 
     else
       Bot.deliver(

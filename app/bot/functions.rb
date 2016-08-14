@@ -76,7 +76,39 @@ def all_events(sender, event_id)
     Bot.deliver(
       recipient: sender,
       message: {
-        text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+        "text": "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location or click on number in the quick replies",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"More Events",
+            "payload":"#{event_id + 5}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 1}",
+            "payload":"SHOW_#{event_id + 1}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 2}",
+            "payload":"SHOW_#{event_id + 2}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 3}",
+            "payload":"SHOW_#{event_id + 3}"
+          } ,
+          {
+            "content_type":"text",
+            "title":"#{event_id + 4}",
+            "payload":"SHOW_#{event_id + 4}" 
+          },
+          {
+            "content_type":"text",
+            "title":"#{event_id + 5}",
+            "payload":"SHOW_#{event_id + 5}" 
+          }                
+        ]
       }
     )
     #User.where(facebook_id: message.sender["id"]).update(newuser: 2)

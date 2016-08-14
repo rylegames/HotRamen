@@ -150,7 +150,7 @@ Hope this was helpful!
     add_event(postback.sender, event_id)
 
   when /MY_EVENTS/i
-    my_events(sender)
+    my_events(message.sender)
     
   else
     Bot.deliver(

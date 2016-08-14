@@ -95,7 +95,7 @@ def add_event(sender, event_id)
   if attendance.id and event_id != 0
 
     Bot.deliver(
-      recipient: postback.sender,
+      recipient: sender,
       message: {
         text: 'Event has been added!'
       }
@@ -103,7 +103,7 @@ def add_event(sender, event_id)
 
     if newuser
       Bot.deliver(
-        recipient: postback.sender,
+        recipient: sender,
         message: {
           text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
         }
@@ -112,7 +112,7 @@ def add_event(sender, event_id)
 
   else
     Bot.deliver(
-      recipient: postback.sender,
+      recipient: sender,
       message: {
         text: "Couldn't find that event. Double check the event number"
       }

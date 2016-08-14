@@ -49,12 +49,9 @@ Hope this was helpful!
     )
 
   when /add/i
-
-    #user = User.where(facebook_id: message.sender["id"]).pluck(:id)
     user = User.find_by(facebook_id: message.sender["id"])
     event_id = message.text.split(" ")[-1].to_i
     attendance = user.attend(user.id, event_id)
-    #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
 
     if user and attendance.id and event_id != 0
 
@@ -90,7 +87,6 @@ Hope this was helpful!
   when /delete/i
     user = User.find_by(facebook_id: message.sender["id"])#.pluck(:id)
     event_id = message.text.split(" ")[-1].to_i
-    #attendance = Attendance.where(user_id: user_id[0], event_id: new_event_id).first_or_create
 
     if Attendance.where(user_id: user.id, event_id: event_id).delete_all
       Bot.deliver(
@@ -114,7 +110,9 @@ Hope this was helpful!
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)  if event_id != 0
-    #user = User.find_by(facebook_id: message.sender["id"])
+    puts message.sender["id"]
+    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+
     if event
       puts "show event #{event.id}"
       parts = event.full_display
@@ -166,14 +164,14 @@ Hope this was helpful!
         }
       )
 
-      # if user.events.size == 0
-      #   Bot.deliver(
-      #     recipient: message.sender,
-      #     message: {
-      #       text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
-      #     }
-      #   )
-      # end
+      if newuser
+        Bot.deliver(
+          recipient: message.sender,
+          message: {
+            text: "Pretty cool huh? Text 'add' and the event ID number, or press 'Add to Schedule', to add it to your schedule!"
+          }
+        )
+      end
 
     else
       Bot.deliver(
@@ -186,7 +184,6 @@ Hope this was helpful!
 
   when /all events/i
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(0)
-    #user = User.find_by(facebook_id: message.sender["id"])
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -316,7 +313,7 @@ end
 Bot.on :postback do |postback|
   case postback.payload
   when 'WELCOME_NEW_USER'
-    user = User.create(facebook_id: postback.sender["id"]) unless User.find_by(facebook_id: postback.sender["id"])
+    user = User.create(facebook_id: postback.sender["id"], newuser: true) unless User.find_by(facebook_id: postback.sender["id"])
     text = "Welcome to My Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. Text 'all events' to start building your schedule!"
     Bot.deliver(
       recipient: postback.sender,
@@ -324,6 +321,27 @@ Bot.on :postback do |postback|
         text: text
       }
     ) 
+
+  when "HELP"
+    text = "Hello! I'm here to tell you everything going on. 
+• all events 
+• my events
+
+For each event, you can 'add', 'delete', and 'show'. For example, here's what you can do with event of ID num 7.
+• add 7
+• delete 7
+• show 7
+
+Hope this was helpful!
+          "
+
+    Bot.deliver(
+      recipient: postback.sender,
+      message: {
+        text: text
+      }
+    )
+
   when /MORE_ALL_EVENTS/i
 
     event_id = postback.payload.split("_")[-1].to_i

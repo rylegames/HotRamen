@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160804004605) do
+ActiveRecord::Schema.define(version: 20160814022945) do
 
   create_table "attendances", force: :cascade do |t|
-    t.integer  "user_id"
+    t.string   "user_id"
     t.integer  "event_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,12 +32,14 @@ ActiveRecord::Schema.define(version: 20160804004605) do
     t.float    "longitude"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["begin_date"], name: "index_events_on_begin_date"
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "facebook_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.boolean  "newuser"
     t.index ["facebook_id"], name: "index_users_on_facebook_id", unique: true
   end
 

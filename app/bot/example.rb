@@ -51,6 +51,7 @@ Hope this was helpful!
   when /add/i
     user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
     event_id = message.text.split(" ")[-1].to_i
+    puts user_id, event_id
     attendance = user.attend(user_id, event_id)
 
     if attendance.id and event_id != 0

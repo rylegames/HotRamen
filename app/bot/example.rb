@@ -183,9 +183,8 @@ Hope this was helpful!
     end
 
   when /all events/i
-    puts message
-    if message.quick_reply
-      event_id = message.quick_reply.payload.to_i
+    if message["quick_reply"]
+      event_id = message["quick_reply"].payload.to_i
     else
       event_id = message.text.split(" ")[-1].to_i
     end
@@ -193,7 +192,7 @@ Hope this was helpful!
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
-    events.each do |event|
+    events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
         message: {
@@ -225,7 +224,7 @@ Hope this was helpful!
     Bot.deliver(
       recipient: message.sender,
       message:{
-        "text": "Show Full Description",     
+        "text": events[-1],     
         "quick_replies":[
           {
             "content_type":"text",

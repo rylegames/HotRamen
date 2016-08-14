@@ -252,8 +252,7 @@ Hope this was helpful!
     end
 
    when /more events/i
-    puts message.as_json["messaging"]["message"]["quick_reply"]["payload"]
-    event_id = 0
+    event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 

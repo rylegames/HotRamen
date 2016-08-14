@@ -49,11 +49,11 @@ Hope this was helpful!
     )
 
   when /add/i
-    user = User.find_by(facebook_id: message.sender["id"])
+    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
     event_id = message.text.split(" ")[-1].to_i
     attendance = user.attend(user.id, event_id)
 
-    if user and attendance.id and event_id != 0
+    if newuser and attendance.id and event_id != 0
 
       Bot.deliver(
         recipient: message.sender,
@@ -62,7 +62,7 @@ Hope this was helpful!
         }
       )
 
-      if user.events.size == 1
+      if newuser == 1
         Bot.deliver(
           recipient: message.sender,
           message: {
@@ -85,10 +85,10 @@ Hope this was helpful!
     attendance = 0
 
   when /delete/i
-    user = User.find_by(facebook_id: message.sender["id"])#.pluck(:id)
+    user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
     event_id = message.text.split(" ")[-1].to_i
 
-    if Attendance.where(user_id: user.id, event_id: event_id).delete_all
+    if Attendance.where(user_id: user_id, event_id: event_id).delete_all
       Bot.deliver(
           recipient: message.sender,
           message: {
@@ -110,7 +110,6 @@ Hope this was helpful!
   when /show/i
     event_id = message.text.split(" ")[-1].to_i
     event = Event.find(event_id)  if event_id != 0
-    puts message.sender["id"]
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
     if event
@@ -184,6 +183,8 @@ Hope this was helpful!
 
   when /all events/i
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(0)
+    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+
     events[0..-2].each do |event|
       Bot.deliver(
         recipient: message.sender,
@@ -247,14 +248,14 @@ Hope this was helpful!
       }
     )
 
-    # if user.events.size == 0
-    #   Bot.deliver(
-    #     recipient: message.sender,
-    #     message: {
-    #       text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
-    #     }
-    #   )
-    # end
+    if newuser
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+        }
+      )
+    end
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

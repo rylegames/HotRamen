@@ -1,4 +1,5 @@
 require 'facebook/messenger'
+require 'functions'
 
 # curl -X POST -H "Content-Type: application/json" -d '{
 #   "setting_type":"call_to_actions",
@@ -384,67 +385,7 @@ Hope this was helpful!
 
   when /MORE_ALL_EVENTS/i
 
-    event_id = 0
-    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
-    newuser = User.where(facebook_id: postback.sender["id"]).pluck(:newuser)[0]
-
-    events[0..-2].each do |event|
-      Bot.deliver(
-        recipient: postback.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
-
-    Bot.deliver(
-      recipient: postback.sender,
-      message:{
-        "text": events[-1].mini_display,     
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"More Events",
-            "payload":"#{event_id + 5}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 1}",
-            "payload":"SHOW_#{event_id + 1}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 2}",
-            "payload":"SHOW_#{event_id + 2}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 3}",
-            "payload":"SHOW_#{event_id + 3}"
-          } ,
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 4}",
-            "payload":"SHOW_#{event_id + 4}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 5}",
-            "payload":"SHOW_#{event_id + 5}" 
-          }                
-        ]
-      }
-    )
-
-    if newuser
-      Bot.deliver(
-        recipient: postback.sender,
-        message: {
-          text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
-        }
-      )
-      #User.where(facebook_id: message.sender["id"]).update(newuser: 2)
-    end
+    all_events(postback.sender, 0)
 
 
   when /ADD/i

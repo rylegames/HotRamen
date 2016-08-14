@@ -52,7 +52,7 @@ Hope this was helpful!
     user_id = User.where(facebook_id: message.sender["id"]).pluck(:id)[0]
     event_id = message.text.split(" ")[-1].to_i
     puts user_id, event_id
-    attendance = user.attend(user_id, event_id)
+    attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
 
     if attendance.id and event_id != 0
 

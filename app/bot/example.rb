@@ -194,9 +194,10 @@ Hope this was helpful!
     # else
     #   event_id = message.text.split(" ")[-1].to_i
     # end
+    puts message.payload
     event_id = 0
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
-    #newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
     events[0..-2].each do |event|
       Bot.deliver(
@@ -230,13 +231,13 @@ Hope this was helpful!
     Bot.deliver(
       recipient: message.sender,
       message:{
-        "text": events[-1],     
+        "text": events[-1].mini_display,     
         "quick_replies":[
-          # {
-          #   "content_type":"text",
-          #   "title":"All Events",
-          #   "payload":"#{event_id + 5}" 
-          # },
+          {
+            "content_type":"text",
+            "title":"All Events",
+            "payload":"#{event_id + 5}" 
+          },
           {
             "content_type":"text",
             "title":"Show #{event_id + 1}",

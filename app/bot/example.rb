@@ -86,7 +86,6 @@ Hope this was helpful!
   when /more events/i
     begin
       event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
-      all_events(message.sender, event_id)
     rescue
       Bot.deliver(
         recipient: message.sender,
@@ -95,7 +94,8 @@ Hope this was helpful!
         }
       ) 
     end
-
+    all_events(message.sender, event_id) if event_id
+    
   when /^(\d*)$/
     event_id = message.text.to_i
     show_event(message.sender, event_id)  

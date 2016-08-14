@@ -45,27 +45,27 @@ def all_events(sender, event_id)
         },
         {
           "content_type":"text",
-          "title":"Show #{event_id + 1}",
+          "title":"#{event_id + 1}",
           "payload":"SHOW_#{event_id + 1}" 
         },
         {
           "content_type":"text",
-          "title":"Show #{event_id + 2}",
+          "title":"#{event_id + 2}",
           "payload":"SHOW_#{event_id + 2}" 
         },
         {
           "content_type":"text",
-          "title":"Show #{event_id + 3}",
+          "title":"#{event_id + 3}",
           "payload":"SHOW_#{event_id + 3}"
         } ,
         {
           "content_type":"text",
-          "title":"Show #{event_id + 4}",
+          "title":"#{event_id + 4}",
           "payload":"SHOW_#{event_id + 4}" 
         },
         {
           "content_type":"text",
-          "title":"Show #{event_id + 5}",
+          "title":"#{event_id + 5}",
           "payload":"SHOW_#{event_id + 5}" 
         }                
       ]

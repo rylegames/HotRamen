@@ -39,7 +39,7 @@ For each event, you can 'add', 'delete', and 'show'. For example, here's what yo
 • delete 7
 • show 7
 
-Hope this was helpful!
+Hope this was helpful! If this is the first time using the bot, text 'new user'
           "
 
     Bot.deliver(
@@ -166,7 +166,7 @@ For each event, you can 'add', 'delete', and 'show'. For example, here's what yo
 • delete 7
 • show 7
 
-Hope this was helpful!
+Hope this was helpful! If this is the first time using the bot, text 'new user'
           "
     Bot.deliver(
       recipient: postback.sender,

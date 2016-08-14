@@ -247,7 +247,7 @@ def my_events(sender)
         }
       )
     end
-    if events.size == 1
+    if user.newuser
       Bot.deliver(
         recipient: sender,
         message: {

@@ -84,8 +84,17 @@ Hope this was helpful!
     all_events(message.sender, 0)
 
   when /more events/i
-    event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
-    all_events(message.sender, event_id)
+    begin
+      event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
+      all_events(message.sender, event_id)
+    rescue
+      Bot.deliver(
+        recipient: postback.sender,
+        message: {
+          text: "Try texting 'all events'"
+        }
+      ) 
+    end
 
   when /^(\d*)$/
     event_id = message.text.to_i

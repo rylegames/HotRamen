@@ -44,7 +44,7 @@ class Event < ApplicationRecord
 		end
 
 		# text = text + self.description + "\n" + self.location
-		temp = self.description + "\n" self.location
+		temp = self.description + "\n" + self.location
 
 		if temp.length > 320
 			new_text = temp.scan(/.{1,320}/)

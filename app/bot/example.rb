@@ -194,56 +194,7 @@ Hope this was helpful!
 
   when /more events/i
     event_id =  message.as_json["messaging"]["message"]["quick_reply"]["payload"].to_i
-    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
-    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
-
-    events[0..-2].each do |event|
-      Bot.deliver(
-        recipient: message.sender,
-        message: {
-          text: event.mini_display
-        }
-      )
-    end
-
-    Bot.deliver(
-      recipient: message.sender,
-      message:{
-        "text": events[-1].mini_display,     
-        "quick_replies":[
-          {
-            "content_type":"text",
-            "title":"More Events",
-            "payload":"#{event_id + 5}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 1}",
-            "payload":"SHOW_#{event_id + 1}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 2}",
-            "payload":"SHOW_#{event_id + 2}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 3}",
-            "payload":"SHOW_#{event_id + 3}"
-          } ,
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 4}",
-            "payload":"SHOW_#{event_id + 4}" 
-          },
-          {
-            "content_type":"text",
-            "title":"Show #{event_id + 5}",
-            "payload":"SHOW_#{event_id + 5}" 
-          }                
-        ]
-      }
-    )
+    all_events(message.sender, event_id)
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

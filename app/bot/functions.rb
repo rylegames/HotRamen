@@ -242,7 +242,7 @@ def my_events(sender, event_id)
   user = User.find_by(facebook_id: sender["id"])
   events = user.events.where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
   quick_replies = Array.new
-  quick_replies.push({ "content_type":"text", "title":"More Events", "payload":"MY_#{event_id + 5}"}) if events.size = 5
+  quick_replies.push({ "content_type":"text", "title":"More Events", "payload":"MY_#{event_id + 5}"}) if events.size == 5
   if user and events.size > 0
     events[0..-2].each do |event|
       Bot.deliver(

@@ -112,6 +112,22 @@ Hope this was helpful!
   when /my events/i
     my_events(message.sender, 0)
 
+  when /new user/i
+    if User.find_by(facebook_id: message.sender["id"]) 
+      user = User.where(facebook_id: message.sender["id"]).update(newuser: true)
+    else
+      user = User.create(facebook_id: message.sender["id"], newuser: true) 
+    end
+
+    text = "Welcome to Hot Ramen, the bot with all the events for Harvard's Opening Days! Created by Ryan Lee '20. \n\nText 'all events' or select the triple line menu button at the botton left and click All Events to start building your schedule!"
+    Bot.deliver(
+      recipient: message.sender,
+      message: {
+        text: text
+      }
+    ) 
+    user = 0
+
   else
     Bot.deliver(
       recipient: message.sender,
@@ -124,7 +140,7 @@ end
 
 Bot.on :postback do |postback|
   case postback.payload
-  when 'WELCOME_NEW_USER'
+  when /WELCOME_NEW_USER/i
     if User.find_by(facebook_id: postback.sender["id"]) 
       user = User.where(facebook_id: postback.sender["id"]).update(newuser: true)
     else
@@ -174,7 +190,7 @@ Hope this was helpful!
     Bot.deliver(
       recipient: postback.sender,
       message: {
-        text: "Couldn't understand that. Try messaging 'help'"
+        text: "Couldn't understand that. Try messaging 'help'. If this is the first time using the bot, text 'new user'"
       }
     )
   end

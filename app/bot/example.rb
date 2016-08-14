@@ -183,10 +183,16 @@ Hope this was helpful!
     end
 
   when /all events/i
-    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(0)
+    if message.quick_reply
+      event_id = message.quick_reply.payload.to_i
+    else
+      event_id = message.text.split(" ")[-1].to_i
+    end
+    puts event_id
+    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
 
-    events[0..-2].each do |event|
+    events.each do |event|
       Bot.deliver(
         recipient: message.sender,
         message: {
@@ -195,25 +201,25 @@ Hope this was helpful!
       )
     end
 
-    Bot.deliver(
-      recipient: message.sender,
-      message:{
-        "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"button",
-            "text": events[-1].mini_display,     
-            "buttons":[
-              {
-                "type":"postback",
-                "title":"More Events",
-                "payload":"MORE_ALL_EVENTS_" + 5.to_s
-              }              
-            ]
-          }
-        }
-      }
-    )
+    # Bot.deliver(
+    #   recipient: message.sender,
+    #   message:{
+    #     "attachment":{
+    #       "type":"template",
+    #       "payload":{
+    #         "template_type":"button",
+    #         "text": events[-1].mini_display,     
+    #         "buttons":[
+    #           {
+    #             "type":"postback",
+    #             "title":"More Events",
+    #             "payload":"MORE_ALL_EVENTS_" + 5.to_s
+    #           }              
+    #         ]
+    #       }
+    #     }
+    #   }
+    # )
 
     Bot.deliver(
       recipient: message.sender,
@@ -222,28 +228,33 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"Show #{1}",
-            "payload":"SHOW_#{1}" 
+            "title":"More Events",
+            "payload":"#{event_id + 5}" 
           },
           {
             "content_type":"text",
-            "title":"Show #{2}",
-            "payload":"SHOW_#{2}" 
+            "title":"Show #{event_id + 1}",
+            "payload":"SHOW_#{event_id + 1}" 
           },
           {
             "content_type":"text",
-            "title":"Show #{3}",
-            "payload":"SHOW_#{3}"
+            "title":"Show #{event_id + 2}",
+            "payload":"SHOW_#{event_id + 2}" 
+          },
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 3}",
+            "payload":"SHOW_#{event_id + 3}"
           } ,
           {
             "content_type":"text",
-            "title":"Show #{4}",
-            "payload":"SHOW_#{4}" 
+            "title":"Show #{event_id + 4}",
+            "payload":"SHOW_#{event_id + 4}" 
           },
           {
             "content_type":"text",
-            "title":"Show #{5}",
-            "payload":"SHOW_#{5}" 
+            "title":"Show #{event_id + 5}",
+            "payload":"SHOW_#{event_id + 5}" 
           }                
         ]
       }

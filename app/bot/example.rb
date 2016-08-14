@@ -189,12 +189,6 @@ Hope this was helpful!
     end
 
   when /all events/i
-    # if message["quick_reply"]
-    #   event_id = message["quick_reply"].payload.to_i
-    # else
-    #   event_id = message.text.split(" ")[-1].to_i
-    # end
-    puts message
     event_id = 0
     events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
     newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
@@ -208,26 +202,6 @@ Hope this was helpful!
       )
     end
 
-    # Bot.deliver(
-    #   recipient: message.sender,
-    #   message:{
-    #     "attachment":{
-    #       "type":"template",
-    #       "payload":{
-    #         "template_type":"button",
-    #         "text": events[-1].mini_display,     
-    #         "buttons":[
-    #           {
-    #             "type":"postback",
-    #             "title":"More Events",
-    #             "payload":"MORE_ALL_EVENTS_" + 5.to_s
-    #           }              
-    #         ]
-    #       }
-    #     }
-    #   }
-    # )
-
     Bot.deliver(
       recipient: message.sender,
       message:{
@@ -235,7 +209,7 @@ Hope this was helpful!
         "quick_replies":[
           {
             "content_type":"text",
-            "title":"All Events",
+            "title":"More Events",
             "payload":"#{event_id + 5}" 
           },
           {
@@ -267,16 +241,69 @@ Hope this was helpful!
       }
     )
 
-    # if newuser
-    #   Bot.deliver(
-    #     recipient: message.sender,
-    #     message: {
-    #       text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
-    #     }
-    #   )
-
+    if newuser
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location."
+        }
+      )
       #User.where(facebook_id: message.sender["id"]).update(newuser: 2)
-    #end
+    end
+
+   when /more events/i
+    puts message.quick_reply
+    event_id = 0
+    events = Event.order(:id).where('begin_date > ?', DateTime.current - 30.minutes).order('id asc').limit(5).offset(event_id)
+    newuser = User.where(facebook_id: message.sender["id"]).pluck(:newuser)[0]
+
+    events[0..-2].each do |event|
+      Bot.deliver(
+        recipient: message.sender,
+        message: {
+          text: event.mini_display
+        }
+      )
+    end
+
+    Bot.deliver(
+      recipient: message.sender,
+      message:{
+        "text": events[-1].mini_display,     
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"More Events",
+            "payload":"#{event_id + 5}" 
+          },
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 1}",
+            "payload":"SHOW_#{event_id + 1}" 
+          },
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 2}",
+            "payload":"SHOW_#{event_id + 2}" 
+          },
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 3}",
+            "payload":"SHOW_#{event_id + 3}"
+          } ,
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 4}",
+            "payload":"SHOW_#{event_id + 4}" 
+          },
+          {
+            "content_type":"text",
+            "title":"Show #{event_id + 5}",
+            "payload":"SHOW_#{event_id + 5}" 
+          }                
+        ]
+      }
+    )
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

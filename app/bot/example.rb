@@ -274,7 +274,7 @@ Hope this was helpful!
     #   )
 
       #User.where(facebook_id: message.sender["id"]).update(newuser: 2)
-    end
+    #end
 
   when /my events/i
     user = User.find_by(facebook_id: message.sender["id"])

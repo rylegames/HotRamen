@@ -76,7 +76,7 @@ def all_events(sender, event_id)
     Bot.deliver(
       recipient: sender,
       message: {
-        "text": "So much fun stuff! 'All events' shows you all current and upcoming events. Each event has a unique ID number right under the title. Text 'Show' and the event ID number to see the full description and location or click on number in the quick replies",
+        "text": "So much fun stuff! 'All events' shows you the latest events. Each event has a unique ID NUMBER right under the title. Text 'Show' and the event ID NUMBER to see the full description and location or click on number in the quick replies",
         "quick_replies":[
           {
             "content_type":"text",
@@ -137,7 +137,7 @@ def add_event(sender, event_id)
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "You've added your first event! Note: you can add, delete, or show an event whenever you want, as long as you include the event id. Text 'my events' to see your entire schedule!"
+          text: "You've added your first event! Note: you can ADD, DELETE, or SHOW an event whenever you want, as long as you include the event ID. \n\nText 'my events' to see your entire schedule!"
         }
       )
     end
@@ -251,7 +251,7 @@ def my_events(sender)
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "You're all set! You can 'delete' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
+          text: "You're all set! You can 'DELETE' your events as well. Text 'help' whenever you need the reference. Welcome aboard and have fun at orientation!"
         }
       )
       User.where(facebook_id: sender["id"]).update(newuser: false)

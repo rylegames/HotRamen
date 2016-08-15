@@ -63,36 +63,47 @@ def all_events(sender, event_id)
 end
 
 def add_event(sender, event_id)
-  user = User.where(facebook_id: sender["id"]).pluck(:id, :newuser)[0]
-  newuser = user[1]
-  user_id = user[0]
-  attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
+  user = User.where(facebook_id: sender["id"]).pluck(:id, :newuser)
+ 
+  if user
+    user = user[0]
+    newuser = user[1]
+    user_id = user[0]
+    attendance = Attendance.where(user_id: user_id, event_id: event_id).first_or_create
 
-  if attendance.id and event_id != 0
+    if attendance.id and event_id != 0
 
-    Bot.deliver(
-      recipient: sender,
-      message: {
-        text: 'Event has been added!'
-      }
-    )
-
-    if newuser
       Bot.deliver(
         recipient: sender,
         message: {
-          text: "You've added your first event! Note: you can ADD, DELETE, or SHOW an event whenever you want, as long as you include the event ID. \n\nText 'my events' or click My Events in the menu to see your entire schedule!"
+          text: 'Event has been added!'
+        }
+      )
+
+      if newuser
+        Bot.deliver(
+          recipient: sender,
+          message: {
+            text: "You've added your first event! Note: you can ADD, DELETE, or SHOW an event whenever you want, as long as you include the event ID. \n\nText 'my events' or click My Events in the menu to see your entire schedule!"
+          }
+        )
+      end
+
+    else
+      Bot.deliver(
+        recipient: sender,
+        message: {
+          text: "Couldn't find that event. Double check the event number"
         }
       )
     end
-
   else
     Bot.deliver(
-      recipient: sender,
-      message: {
-        text: "Couldn't find that event. Double check the event number"
-      }
-    )
+        recipient: sender,
+        message: {
+          text: "Couldn't detect your account. Text 'new user' to initialize your account."
+        }
+      )
   end
 
   user = 0
